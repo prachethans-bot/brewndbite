@@ -801,8 +801,8 @@ const SOCIALS = [
     ),
   },
   {
-    name:'Facebook', handle:'Brew & Bite Cafe',
-    followers:'8.2K', url:'https://facebook.com/brewandbite',
+    name:'Facebook', handle:'@prachethan_k',
+    followers:'', url:'https://facebook.com/prachethan_k',
     color:'linear-gradient(135deg,#1877f2,#166fe5)',
     icon:(
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
