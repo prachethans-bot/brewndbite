@@ -789,8 +789,8 @@ function HomePage({ onDetails, onAdd }:
 // ── Social Media Section ─────────────────────────────────────────────────────
 const SOCIALS = [
   {
-    name:'Instagram', handle:'@brewandbite.cafe',
-    followers:'12.4K', url:'https://instagram.com/brewandbite.cafe',
+    name:'Instagram', handle:'@prachethan_k',
+    followers:'', url:'https://instagram.com/prachethan_k',
     color:'linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)',
     icon:(
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -882,7 +882,7 @@ function SocialMediaSection() {
                   <div style={{ flex:1, minWidth:0 }}>
                     <div style={{ fontWeight:700, color:'#f5e6ce', fontSize:'.95rem', marginBottom:2 }}>{name}</div>
                     <div style={{ color:'#b8956a', fontSize:'.82rem', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{handle}</div>
-                    <div style={{ color:'#7a5c3a', fontSize:'.76rem', marginTop:4 }}>{followers} followers</div>
+                    {followers && <div style={{ color:'#7a5c3a', fontSize:'.76rem', marginTop:4 }}>{followers} followers</div>}
                   </div>
                   {/* Arrow */}
                   <div style={{ color:'#d4924d', flexShrink:0 }}>
