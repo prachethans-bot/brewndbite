@@ -1,0 +1,59 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@theme inline {
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+}
+
+@layer base {
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: #100904;
+    color: #f5e6ce;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+:root {
+  --bg: #100904;
+  --bg2: #1a0f06;
+  --bg3: #140c05;
+  --card: #1e1108;
+  --card2: #241408;
+  --acc: #d4924d;
+  --accl: #f0b870;
+  --accd: #9a6530;
+  --teal: #2dd4bf;
+  --green: #22c55e;
+  --text: #f5e6ce;
+  --muted: #b8956a;
+  --dim: #7a5c3a;
+  --border: rgba(212,146,77,.2);
+  --border2: rgba(212,146,77,.35);
+  --r: 16px;
+  --tr: .36s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.13); }
+}
+@keyframes bob {
+  0%,100% { opacity: 1; transform: scaleY(1); }
+  50%      { opacity: .3; transform: scaleY(.7); }
+}
+@keyframes popIn {
+  from { transform: scale(0) rotate(-15deg); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(60px) scale(.95); }
+  to   { opacity: 1; transform: none; }
+}
