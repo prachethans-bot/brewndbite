@@ -450,31 +450,50 @@ function PaymentModal({ open, amount, onClose, onSuccess }:
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const tabStyle = (active: boolean) => ({
-    flex:1, padding:'10px 6px', border:'none', borderRadius:10,
-    background: active ? 'linear-gradient(135deg,#9a6530,#d4924d)' : 'rgba(212,146,77,.08)',
-    color: active ? '#fff' : '#b8956a', fontSize:'.82rem', fontWeight:700,
-    cursor:'pointer', transition:'all .25s', fontFamily:"'Inter',sans-serif",
+  const tabStyle = (active: boolean, color?: string) => ({
+    flex:1, padding:'11px 6px', border: active ? 'none' : '1px solid transparent',
+    borderRadius:11, gap:6,
+    background: active ? (color || 'linear-gradient(135deg,#9a6530,#d4924d)') : 'transparent',
+    color: active ? '#fff' : '#7a5c3a', fontSize:'.8rem', fontWeight:700,
+    cursor:'pointer', transition:'all .3s cubic-bezier(.4,0,.2,1)',
+    fontFamily:"'Inter',sans-serif", display:'flex', alignItems:'center', justifyContent:'center',
+    transform: active ? 'scale(1.03)' : 'scale(1)',
+    boxShadow: active ? '0 4px 16px rgba(0,0,0,.35)' : 'none',
   });
+
+  // Animated success checkmark SVG
+  const SuccessCheck = ({ color = '#22c55e' }: { color?: string }) => (
+    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" style={{ margin:'0 auto 12px', display:'block' }}>
+      <circle cx="32" cy="32" r="30" stroke={color} strokeWidth="3" strokeDasharray="188.5" strokeDashoffset="0"
+        style={{ animation:'dashCircle .6s ease both' }}/>
+      <polyline points="18,33 28,43 46,22" stroke={color} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"
+        strokeDasharray="40" strokeDashoffset="0"
+        style={{ animation:'dashCheck .4s .5s ease both' }}/>
+    </svg>
+  );
 
   return (
     <div onClick={(e) => { if (e.target === e.currentTarget) onClose(); }} style={{
-      position:'fixed', inset:0, zIndex:750, background:'rgba(0,0,0,.85)', backdropFilter:'blur(10px)',
+      position:'fixed', inset:0, zIndex:750, background:'rgba(0,0,0,.88)', backdropFilter:'blur(12px)',
       display:'flex', alignItems:'center', justifyContent:'center', padding:20,
       opacity: open ? 1 : 0, pointerEvents: open ? 'all' : 'none',
       transition:'opacity .36s cubic-bezier(.4,0,.2,1)' }}>
       <div style={{ background:'linear-gradient(160deg,#201208 0%,#2a1508 60%,#180e04 100%)',
-        border:'1px solid rgba(212,146,77,.3)', borderRadius:24, padding:'32px 32px 28px',
-        maxWidth:460, width:'100%', boxShadow:'0 24px 80px rgba(0,0,0,.7)', position:'relative',
-        animation: open ? 'slideUp .4s cubic-bezier(.4,0,.2,1) both' : 'none' }}>
+        border:'1px solid rgba(212,146,77,.35)', borderRadius:26, padding:'32px 32px 28px',
+        maxWidth:460, width:'100%', boxShadow:'0 32px 100px rgba(0,0,0,.8)', position:'relative',
+        animation: open ? 'payModalIn .45s cubic-bezier(.34,1.56,.64,1) both' : 'none' }}>
 
-        {/* Header */}
+        {/* Close */}
         <button onClick={onClose} style={{ position:'absolute', top:16, right:16,
-          background:'rgba(212,146,77,.1)', border:'1px solid rgba(212,146,77,.25)', borderRadius:'50%',
+          background:'rgba(212,146,77,.08)', border:'1px solid rgba(212,146,77,.2)', borderRadius:'50%',
           width:32, height:32, color:'#b8956a', fontSize:'1rem', cursor:'pointer',
-          display:'flex', alignItems:'center', justifyContent:'center' }}>✕</button>
+          display:'flex', alignItems:'center', justifyContent:'center',
+          transition:'all .2s' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background='rgba(212,146,77,.2)'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background='rgba(212,146,77,.08)'; }}>✕</button>
 
-        <div style={{ marginBottom:20 }}>
+        {/* Header with animated amount */}
+        <div style={{ marginBottom:20, animation:'fadeSlideDown .4s .05s both' }}>
           <p style={{ fontSize:'.72rem', fontWeight:700, letterSpacing:'.14em', textTransform:'uppercase', color:'#d4924d', marginBottom:4 }}>
             Secure Checkout
           </p>
@@ -482,42 +501,71 @@ function PaymentModal({ open, amount, onClose, onSuccess }:
             Complete Your Order
           </h2>
           <div style={{ display:'flex', alignItems:'center', gap:8, marginTop:8 }}>
-            <span style={{ fontSize:'1.3rem', fontWeight:800, color:'#d4924d' }}>₹{amount}</span>
-            <span style={{ fontSize:'.8rem', color:'#7a5c3a' }}>• Brew & Bite Cafe</span>
+            <span style={{ fontSize:'1.4rem', fontWeight:800, color:'#d4924d',
+              animation:'amountPop .5s .2s cubic-bezier(.34,1.56,.64,1) both' }}>₹{amount}</span>
+            <span style={{ fontSize:'.8rem', color:'#7a5c3a' }}>• Brew &amp; Bite Cafe</span>
           </div>
         </div>
 
-        <div style={{ height:1, background:'linear-gradient(90deg,transparent,rgba(212,146,77,.3),transparent)', marginBottom:20 }}/>
+        <div style={{ height:1, background:'linear-gradient(90deg,transparent,rgba(212,146,77,.4),transparent)', marginBottom:20 }}/>
 
         {/* Tab bar */}
-        <div style={{ display:'flex', gap:6, marginBottom:22, background:'rgba(0,0,0,.3)', padding:4, borderRadius:14 }}>
-          <button style={tabStyle(tab==='card')}   onClick={() => setTab('card')}>
-            💳 Card
+        <div style={{ display:'flex', gap:5, marginBottom:22,
+          background:'rgba(0,0,0,.4)', padding:5, borderRadius:15,
+          animation:'fadeSlideDown .4s .1s both' }}>
+          {/* Card tab */}
+          <button style={tabStyle(tab==='card')} onClick={() => setTab('card')}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+              <line x1="1" y1="10" x2="23" y2="10"/>
+            </svg>
+            Card
           </button>
-          <button style={tabStyle(tab==='upi')}    onClick={() => setTab('upi')}>
-            📱 UPI
+          {/* UPI tab */}
+          <button style={tabStyle(tab==='upi')} onClick={() => setTab('upi')}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+              <line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+            UPI
           </button>
-          <button style={tabStyle(tab==='phonepe')} onClick={() => setTab('phonepe')}>
-            🟣 PhonePe
+          {/* PhonePe tab */}
+          <button style={tabStyle(tab==='phonepe', 'linear-gradient(135deg,#5f259f,#7b2fa8)')} onClick={() => setTab('phonepe')}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10z"/>
+              <path d="M8 12c0-2.67 2.24-4.8 5-4.8h1.2V5l3.6 3.6-3.6 3.6V9.6H13C11.12 9.6 9.6 11.12 9.6 13S11.12 16.4 13 16.4h3.6V18.8H13C10.24 18.8 8 16.67 8 14" strokeWidth="1.5"/>
+            </svg>
+            PhonePe
           </button>
         </div>
 
         {/* ── CARD TAB ── */}
         {tab === 'card' && (
-          <div>
+          <div key="card" style={{ animation:'tabSlideIn .3s cubic-bezier(.4,0,.2,1) both' }}>
             {configErr ? (
-              <div style={{ background:'rgba(239,68,68,.1)', border:'1px solid rgba(239,68,68,.3)',
-                borderRadius:12, padding:'16px 18px', textAlign:'center' }}>
+              <div style={{ background:'rgba(239,68,68,.08)', border:'1px solid rgba(239,68,68,.25)',
+                borderRadius:14, padding:'20px 18px', textAlign:'center',
+                animation:'tabSlideIn .3s both' }}>
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fca5a5" strokeWidth="1.5"
+                  style={{ margin:'0 auto 10px', display:'block' }}>
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
                 <p style={{ color:'#fca5a5', fontSize:'.88rem', lineHeight:1.6 }}>{configErr}</p>
                 <p style={{ color:'#7a5c3a', fontSize:'.78rem', marginTop:8 }}>
                   Connect Stripe in the Integrations panel to enable card payments.
                 </p>
               </div>
             ) : !stripeObj || !clientSecret ? (
-              <div style={{ textAlign:'center', padding:'24px 0' }}>
-                <div style={{ width:32, height:32, border:'3px solid rgba(212,146,77,.3)',
-                  borderTopColor:'#d4924d', borderRadius:'50%', margin:'0 auto 12px',
-                  animation:'spin 1s linear infinite' }}/>
+              <div style={{ textAlign:'center', padding:'28px 0' }}>
+                {/* Pulsing ring loader */}
+                <div style={{ position:'relative', width:56, height:56, margin:'0 auto 16px' }}>
+                  <div style={{ position:'absolute', inset:0, border:'3px solid rgba(212,146,77,.15)',
+                    borderRadius:'50%' }}/>
+                  <div style={{ position:'absolute', inset:0, border:'3px solid transparent',
+                    borderTopColor:'#d4924d', borderRadius:'50%', animation:'spin .9s linear infinite' }}/>
+                  <div style={{ position:'absolute', inset:8, border:'2px solid transparent',
+                    borderTopColor:'rgba(212,146,77,.5)', borderRadius:'50%', animation:'spin .7s linear infinite reverse' }}/>
+                </div>
                 <p style={{ color:'#b8956a', fontSize:'.88rem' }}>Setting up secure payment…</p>
               </div>
             ) : (
@@ -526,62 +574,88 @@ function PaymentModal({ open, amount, onClose, onSuccess }:
               </Elements>
             )}
             <div style={{ display:'flex', alignItems:'center', gap:6, marginTop:16, justifyContent:'center' }}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7a5c3a" strokeWidth="2">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5a3c1a" strokeWidth="2">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
               </svg>
-              <span style={{ color:'#7a5c3a', fontSize:'.75rem' }}>Secured by Stripe · 256-bit SSL</span>
+              <span style={{ color:'#5a3c1a', fontSize:'.73rem' }}>Secured by Stripe · 256-bit SSL</span>
             </div>
           </div>
         )}
 
         {/* ── UPI TAB ── */}
         {tab === 'upi' && (
-          <div style={{ textAlign:'center' }}>
+          <div key="upi" style={{ textAlign:'center', animation:'tabSlideIn .3s cubic-bezier(.4,0,.2,1) both' }}>
             {!upiPaid ? (
               <>
-                <p style={{ color:'#b8956a', fontSize:'.88rem', marginBottom:16 }}>
+                <p style={{ color:'#b8956a', fontSize:'.85rem', marginBottom:16, lineHeight:1.6 }}>
                   Scan with any UPI app — Google Pay, Paytm, BHIM, or your bank app
                 </p>
-                <div style={{ background:'rgba(255,255,255,.04)', border:'1px solid rgba(212,146,77,.25)',
-                  borderRadius:16, padding:16, display:'inline-block', marginBottom:16 }}>
-                  <img src={qrApiUrl} alt="UPI QR" width="180" height="180"
-                    style={{ borderRadius:8, display:'block' }}
-                    onError={(e) => { (e.target as HTMLImageElement).style.display='none'; }}/>
+                {/* QR with animated border */}
+                <div style={{ position:'relative', display:'inline-block', marginBottom:16 }}>
+                  <div style={{ background:'rgba(255,255,255,.04)', border:'1px solid rgba(212,146,77,.25)',
+                    borderRadius:18, padding:14, animation:'qrReveal .5s .1s cubic-bezier(.34,1.26,.64,1) both' }}>
+                    <img src={qrApiUrl} alt="UPI QR" width="180" height="180"
+                      style={{ borderRadius:10, display:'block' }}
+                      onError={(e) => { (e.target as HTMLImageElement).style.display='none'; }}/>
+                  </div>
+                  {/* Scanning line */}
+                  <div style={{ position:'absolute', left:14, right:14, height:2,
+                    background:'linear-gradient(90deg,transparent,#d4924d,transparent)',
+                    borderRadius:2, animation:'scanLine 2s ease-in-out infinite',
+                    top:14 }}/>
                 </div>
-                <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, marginBottom:16 }}>
-                  <div style={{ background:'rgba(212,146,77,.1)', border:'1px solid rgba(212,146,77,.25)',
-                    borderRadius:10, padding:'10px 16px', display:'flex', alignItems:'center', gap:10, flex:1, maxWidth:260 }}>
-                    <span style={{ fontFamily:'monospace', color:'#f0b870', fontSize:'.9rem', flex:1 }}>{upiId}</span>
-                    <button onClick={copyUpi} style={{ background:'none', border:'none', cursor:'pointer',
-                      color: copied ? '#22c55e' : '#b8956a', fontSize:'.78rem', fontWeight:600,
-                      fontFamily:"'Inter',sans-serif", whiteSpace:'nowrap' }}>
+                {/* UPI ID row */}
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, marginBottom:14 }}>
+                  <div style={{ background:'rgba(212,146,77,.08)', border:'1px solid rgba(212,146,77,.22)',
+                    borderRadius:10, padding:'9px 14px', display:'flex', alignItems:'center', gap:10,
+                    flex:1, maxWidth:270, animation:'fadeSlideDown .4s .15s both' }}>
+                    <span style={{ fontFamily:'monospace', color:'#f0b870', fontSize:'.88rem', flex:1 }}>{upiId}</span>
+                    <button onClick={copyUpi} style={{ background: copied ? 'rgba(34,197,94,.15)' : 'rgba(212,146,77,.15)',
+                      border: copied ? '1px solid rgba(34,197,94,.4)' : '1px solid rgba(212,146,77,.3)',
+                      borderRadius:7, cursor:'pointer', color: copied ? '#22c55e' : '#d4924d',
+                      fontSize:'.76rem', fontWeight:700, padding:'4px 10px',
+                      fontFamily:"'Inter',sans-serif", whiteSpace:'nowrap', transition:'all .25s' }}>
                       {copied ? '✓ Copied' : 'Copy'}
                     </button>
                   </div>
                 </div>
-                <a href={upiLink} style={{ display:'inline-block', background:'rgba(212,146,77,.1)',
-                  border:'1px solid rgba(212,146,77,.3)', color:'#d4924d', borderRadius:10,
-                  padding:'10px 20px', fontSize:'.85rem', fontWeight:600,
-                  textDecoration:'none', marginBottom:18 }}>
-                  Open UPI App ↗
+                <a href={upiLink} style={{ display:'inline-flex', alignItems:'center', gap:6,
+                  background:'rgba(212,146,77,.1)', border:'1px solid rgba(212,146,77,.28)',
+                  color:'#d4924d', borderRadius:10, padding:'9px 18px', fontSize:'.84rem', fontWeight:600,
+                  textDecoration:'none', marginBottom:16, transition:'all .25s',
+                  animation:'fadeSlideDown .4s .2s both' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background='rgba(212,146,77,.18)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background='rgba(212,146,77,.1)'; }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4Z"/>
+                    <line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+                  </svg>
+                  Open UPI App
                 </a>
                 <button onClick={() => setUpiPaid(true)} style={{
                   display:'block', width:'100%', background:'linear-gradient(135deg,#9a6530,#d4924d,#f0b870)',
-                  color:'#fff', border:'none', borderRadius:12, padding:14,
-                  fontSize:'1rem', fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
-                  I have paid ✓
+                  color:'#fff', border:'none', borderRadius:13, padding:'14px',
+                  fontSize:'1rem', fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif",
+                  boxShadow:'0 4px 20px rgba(212,146,77,.3)', transition:'all .25s',
+                  animation:'fadeSlideDown .4s .25s both' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform='translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow='0 8px 28px rgba(212,146,77,.45)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform='none'; (e.currentTarget as HTMLElement).style.boxShadow='0 4px 20px rgba(212,146,77,.3)'; }}>
+                  I have paid
                 </button>
               </>
             ) : (
-              <div>
-                <div style={{ fontSize:'3rem', marginBottom:12 }}>✅</div>
-                <h3 style={{ fontFamily:"'Playfair Display',serif", color:'#f0b870', marginBottom:8 }}>Payment confirmed!</h3>
-                <p style={{ color:'#b8956a', fontSize:'.88rem', marginBottom:20 }}>Thank you for paying via UPI.</p>
+              <div style={{ animation:'successIn .5s cubic-bezier(.34,1.36,.64,1) both', padding:'8px 0' }}>
+                <SuccessCheck/>
+                <h3 style={{ fontFamily:"'Playfair Display',serif", color:'#f0b870', marginBottom:6, fontSize:'1.3rem' }}>Payment confirmed!</h3>
+                <p style={{ color:'#b8956a', fontSize:'.86rem', marginBottom:22 }}>Thank you for paying via UPI.</p>
                 <button onClick={onSuccess} style={{
                   width:'100%', background:'linear-gradient(135deg,#9a6530,#d4924d,#f0b870)',
-                  color:'#fff', border:'none', borderRadius:12, padding:14, fontSize:'1rem',
-                  fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
+                  color:'#fff', border:'none', borderRadius:13, padding:14, fontSize:'1rem',
+                  fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif",
+                  boxShadow:'0 4px 20px rgba(212,146,77,.3)', transition:'all .25s' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform='translateY(-2px)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform='none'; }}>
                   Place My Order →
                 </button>
               </div>
@@ -591,61 +665,91 @@ function PaymentModal({ open, amount, onClose, onSuccess }:
 
         {/* ── PHONEPE TAB ── */}
         {tab === 'phonepe' && (
-          <div style={{ textAlign:'center' }}>
+          <div key="phonepe" style={{ textAlign:'center', animation:'tabSlideIn .3s cubic-bezier(.4,0,.2,1) both' }}>
             {!upiPaid ? (
               <>
-                {/* PhonePe brand bar */}
-                <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, marginBottom:16 }}>
-                  <div style={{ width:36, height:36, borderRadius:10, overflow:'hidden',
+                {/* PhonePe brand header */}
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, marginBottom:14,
+                  animation:'fadeSlideDown .35s both' }}>
+                  <div style={{ width:40, height:40, borderRadius:12,
                     background:'linear-gradient(135deg,#5f259f,#7b2fa8)',
-                    display:'flex', alignItems:'center', justifyContent:'center' }}>
+                    display:'flex', alignItems:'center', justifyContent:'center',
+                    boxShadow:'0 4px 14px rgba(95,37,159,.5)' }}>
                     <svg width="22" height="22" viewBox="0 0 40 40" fill="none">
-                      <circle cx="20" cy="20" r="20" fill="#5f259f"/>
                       <path d="M12 20c0-4.4 3.6-8 8-8h2v-4l6 6-6 6v-4h-2c-2.2 0-4 1.8-4 4s1.8 4 4 4h6v4H20c-4.4 0-8-3.6-8-8z" fill="white"/>
                     </svg>
                   </div>
-                  <span style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.1rem', color:'#f0b870', fontWeight:700 }}>PhonePe</span>
+                  <span style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.15rem', color:'#c084fc', fontWeight:700,
+                    letterSpacing:'.02em' }}>PhonePe</span>
                 </div>
-                <p style={{ color:'#b8956a', fontSize:'.88rem', marginBottom:16 }}>
-                  Open PhonePe → Scan QR or enter UPI ID below
+                <p style={{ color:'#b8956a', fontSize:'.85rem', marginBottom:16, lineHeight:1.6 }}>
+                  Scan QR with PhonePe or enter UPI ID manually
                 </p>
-                <div style={{ background:'rgba(255,255,255,.04)', border:'1px solid rgba(95,37,159,.4)',
-                  borderRadius:16, padding:16, display:'inline-block', marginBottom:16 }}>
-                  <img src={qrApiUrl} alt="PhonePe QR" width="180" height="180"
-                    style={{ borderRadius:8, display:'block' }}
-                    onError={(e) => { (e.target as HTMLImageElement).style.display='none'; }}/>
+                {/* QR with purple border */}
+                <div style={{ position:'relative', display:'inline-block', marginBottom:16 }}>
+                  <div style={{ background:'rgba(95,37,159,.08)', border:'1px solid rgba(95,37,159,.45)',
+                    borderRadius:18, padding:14, animation:'qrReveal .5s .1s cubic-bezier(.34,1.26,.64,1) both' }}>
+                    <img src={qrApiUrl} alt="PhonePe QR" width="180" height="180"
+                      style={{ borderRadius:10, display:'block' }}
+                      onError={(e) => { (e.target as HTMLImageElement).style.display='none'; }}/>
+                  </div>
+                  <div style={{ position:'absolute', left:14, right:14, height:2,
+                    background:'linear-gradient(90deg,transparent,#c084fc,transparent)',
+                    borderRadius:2, animation:'scanLine 2s ease-in-out infinite', top:14 }}/>
                 </div>
-                <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, marginBottom:16 }}>
-                  <div style={{ background:'rgba(95,37,159,.15)', border:'1px solid rgba(95,37,159,.4)',
-                    borderRadius:10, padding:'10px 16px', display:'flex', alignItems:'center', gap:10, flex:1, maxWidth:260 }}>
-                    <span style={{ fontFamily:'monospace', color:'#c084fc', fontSize:'.9rem', flex:1 }}>{upiId}</span>
-                    <button onClick={copyUpi} style={{ background:'none', border:'none', cursor:'pointer',
-                      color: copied ? '#22c55e' : '#b8956a', fontSize:'.78rem', fontWeight:600,
-                      fontFamily:"'Inter',sans-serif", whiteSpace:'nowrap' }}>
+                {/* UPI ID row */}
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, marginBottom:14 }}>
+                  <div style={{ background:'rgba(95,37,159,.1)', border:'1px solid rgba(95,37,159,.35)',
+                    borderRadius:10, padding:'9px 14px', display:'flex', alignItems:'center', gap:10,
+                    flex:1, maxWidth:270, animation:'fadeSlideDown .4s .15s both' }}>
+                    <span style={{ fontFamily:'monospace', color:'#c084fc', fontSize:'.88rem', flex:1 }}>{upiId}</span>
+                    <button onClick={copyUpi} style={{ background: copied ? 'rgba(34,197,94,.15)' : 'rgba(95,37,159,.25)',
+                      border: copied ? '1px solid rgba(34,197,94,.4)' : '1px solid rgba(95,37,159,.4)',
+                      borderRadius:7, cursor:'pointer', color: copied ? '#22c55e' : '#c084fc',
+                      fontSize:'.76rem', fontWeight:700, padding:'4px 10px',
+                      fontFamily:"'Inter',sans-serif", whiteSpace:'nowrap', transition:'all .25s' }}>
                       {copied ? '✓ Copied' : 'Copy'}
                     </button>
                   </div>
                 </div>
-                <div style={{ background:'rgba(95,37,159,.1)', border:'1px solid rgba(95,37,159,.3)',
-                  borderRadius:10, padding:'10px 14px', marginBottom:18, fontSize:'.82rem', color:'#b8956a', lineHeight:1.6 }}>
-                  Open PhonePe → Send Money → To UPI ID → Enter <strong style={{ color:'#c084fc' }}>{upiId}</strong> → Enter ₹{amount}
+                {/* Steps */}
+                <div style={{ background:'rgba(95,37,159,.08)', border:'1px solid rgba(95,37,159,.25)',
+                  borderRadius:12, padding:'12px 14px', marginBottom:16,
+                  animation:'fadeSlideDown .4s .2s both' }}>
+                  {['Open PhonePe', 'Send Money → To UPI ID', `Enter ${upiId}`, `Enter ₹${amount} & Pay`].map((step, i) => (
+                    <div key={step} style={{ display:'flex', alignItems:'center', gap:10,
+                      padding:'5px 0', borderBottom: i < 3 ? '1px solid rgba(95,37,159,.15)' : 'none' }}>
+                      <span style={{ width:20, height:20, borderRadius:'50%',
+                        background:'linear-gradient(135deg,#5f259f,#7b2fa8)',
+                        display:'flex', alignItems:'center', justifyContent:'center',
+                        fontSize:'.65rem', fontWeight:800, color:'#fff', flexShrink:0 }}>{i+1}</span>
+                      <span style={{ fontSize:'.82rem', color:'#b8956a', textAlign:'left' }}>{step}</span>
+                    </div>
+                  ))}
                 </div>
                 <button onClick={() => setUpiPaid(true)} style={{
-                  width:'100%', background:'linear-gradient(135deg,#5f259f,#7b2fa8)',
-                  color:'#fff', border:'none', borderRadius:12, padding:14,
-                  fontSize:'1rem', fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
-                  I have paid via PhonePe ✓
+                  width:'100%', background:'linear-gradient(135deg,#5f259f,#7b2fa8,#9333ea)',
+                  color:'#fff', border:'none', borderRadius:13, padding:14,
+                  fontSize:'1rem', fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif",
+                  boxShadow:'0 4px 20px rgba(95,37,159,.4)', transition:'all .25s',
+                  animation:'fadeSlideDown .4s .25s both' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform='translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow='0 8px 28px rgba(95,37,159,.55)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform='none'; (e.currentTarget as HTMLElement).style.boxShadow='0 4px 20px rgba(95,37,159,.4)'; }}>
+                  I have paid via PhonePe
                 </button>
               </>
             ) : (
-              <div>
-                <div style={{ fontSize:'3rem', marginBottom:12 }}>✅</div>
-                <h3 style={{ fontFamily:"'Playfair Display',serif", color:'#f0b870', marginBottom:8 }}>Payment confirmed!</h3>
-                <p style={{ color:'#b8956a', fontSize:'.88rem', marginBottom:20 }}>Thank you for paying via PhonePe.</p>
+              <div style={{ animation:'successIn .5s cubic-bezier(.34,1.36,.64,1) both', padding:'8px 0' }}>
+                <SuccessCheck color="#a855f7"/>
+                <h3 style={{ fontFamily:"'Playfair Display',serif", color:'#c084fc', marginBottom:6, fontSize:'1.3rem' }}>Payment confirmed!</h3>
+                <p style={{ color:'#b8956a', fontSize:'.86rem', marginBottom:22 }}>Thank you for paying via PhonePe.</p>
                 <button onClick={onSuccess} style={{
                   width:'100%', background:'linear-gradient(135deg,#5f259f,#7b2fa8)',
-                  color:'#fff', border:'none', borderRadius:12, padding:14, fontSize:'1rem',
-                  fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
+                  color:'#fff', border:'none', borderRadius:13, padding:14, fontSize:'1rem',
+                  fontWeight:700, cursor:'pointer', fontFamily:"'Inter',sans-serif",
+                  boxShadow:'0 4px 20px rgba(95,37,159,.4)', transition:'all .25s' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform='translateY(-2px)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform='none'; }}>
                   Place My Order →
                 </button>
               </div>
@@ -1162,7 +1266,55 @@ export default function App() {
   return (
     <div style={{ background:'#100904', color:'#f5e6ce', fontFamily:"'Inter',sans-serif", minHeight:'100vh', overflowX:'hidden' }}>
       {/* Spinner keyframe */}
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } } @keyframes slideUp { from { opacity:0; transform:translateY(60px) scale(.95); } to { opacity:1; transform:none; } } @keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:none; } } @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.13)} } @keyframes bob { 0%,100%{opacity:1;transform:scaleY(1)} 50%{opacity:.3;transform:scaleY(.7)} } @keyframes popIn { from{transform:scale(0) rotate(-15deg);opacity:0} to{transform:none;opacity:1} }`}</style>
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes slideUp { from { opacity:0; transform:translateY(60px) scale(.95); } to { opacity:1; transform:none; } }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:none; } }
+        @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.13)} }
+        @keyframes bob { 0%,100%{opacity:1;transform:scaleY(1)} 50%{opacity:.3;transform:scaleY(.7)} }
+        @keyframes popIn { from{transform:scale(0) rotate(-15deg);opacity:0} to{transform:none;opacity:1} }
+
+        /* Payment modal animations */
+        @keyframes payModalIn {
+          from { opacity:0; transform:translateY(48px) scale(.93); }
+          to   { opacity:1; transform:none; }
+        }
+        @keyframes tabSlideIn {
+          from { opacity:0; transform:translateX(14px); }
+          to   { opacity:1; transform:none; }
+        }
+        @keyframes fadeSlideDown {
+          from { opacity:0; transform:translateY(-10px); }
+          to   { opacity:1; transform:none; }
+        }
+        @keyframes amountPop {
+          0%   { transform:scale(.7); opacity:0; }
+          70%  { transform:scale(1.12); }
+          100% { transform:scale(1); opacity:1; }
+        }
+        @keyframes qrReveal {
+          from { opacity:0; transform:scale(.88); }
+          to   { opacity:1; transform:none; }
+        }
+        @keyframes scanLine {
+          0%   { top:14px; opacity:0; }
+          10%  { opacity:1; }
+          90%  { opacity:1; }
+          100% { top:calc(100% - 16px); opacity:0; }
+        }
+        @keyframes successIn {
+          from { opacity:0; transform:scale(.82) translateY(20px); }
+          to   { opacity:1; transform:none; }
+        }
+        @keyframes dashCircle {
+          from { stroke-dashoffset:188.5; opacity:0; }
+          to   { stroke-dashoffset:0; opacity:1; }
+        }
+        @keyframes dashCheck {
+          from { stroke-dashoffset:40; }
+          to   { stroke-dashoffset:0; }
+        }
+      `}</style>
 
       {/* Nav */}
       <nav style={{ position:'fixed', top:0, left:0, right:0, zIndex:500,
