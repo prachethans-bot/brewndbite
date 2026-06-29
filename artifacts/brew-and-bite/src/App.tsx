@@ -821,8 +821,8 @@ const SOCIALS = [
     ),
   },
   {
-    name:'YouTube', handle:'Brew & Bite Cafe',
-    followers:'3.1K', url:'https://youtube.com/@BrewAndBiteCafe',
+    name:'YouTube', handle:'prachethan.star',
+    followers:'', url:'https://youtube.com/@prachethan.star',
     color:'linear-gradient(135deg,#ff0000,#cc0000)',
     icon:(
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
