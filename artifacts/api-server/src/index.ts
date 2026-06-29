@@ -53,8 +53,8 @@ if (Number.isNaN(port) || port <= 0) {
   throw new Error(`Invalid PORT value: "${rawPort}"`);
 }
 
-await initStripe();
-
+// Bind to the port immediately so health checks pass from the first request.
+// Stripe init runs in the background — the server is ready before it finishes.
 app.listen(port, (err) => {
   if (err) {
     logger.error({ err }, "Error listening on port");
@@ -62,3 +62,5 @@ app.listen(port, (err) => {
   }
   logger.info({ port }, "Server listening");
 });
+
+initStripe();
