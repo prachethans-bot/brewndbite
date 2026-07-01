@@ -649,6 +649,7 @@ function HomePage({ onDetails, onAdd }:
         </div>
       </div>
 
+      <ReviewsSection/>
       <GoogleMapsSection/>
       <QRMenuSection/>
 
@@ -722,6 +723,204 @@ function SocialMediaSection() {
         </Reveal>
       </div>
     </div>
+  );
+}
+
+// ── Reviews Section ──────────────────────────────────────────────────────────
+interface Review { id: number; name: string; rating: number; comment: string; date: string; }
+const SEED_REVIEWS: Review[] = [
+  { id:1, name:'Priya M.',    rating:5, comment:'Absolutely love this place! The masala chai is hands-down the best in Koramangala. The ambience is so cozy — I come here every weekend.', date:'June 2026' },
+  { id:2, name:'Arjun S.',    rating:5, comment:'The signature coffee is a must-try. Rich, smooth, and beautifully presented. Spiced Puffs pair perfectly with it. Will definitely be back!', date:'June 2026' },
+  { id:3, name:'Nisha R.',    rating:4, comment:'Great food and wonderful vibes. The Oreo Milkshake is dangerously good. Only wish they had more seating on weekends — it gets packed!', date:'May 2026' },
+  { id:4, name:'Rahul K.',    rating:5, comment:'My go-to spot for remote work sessions. Excellent WiFi, fresh food and the staff are super friendly. The Classic Burger is a 10/10.', date:'May 2026' },
+  { id:5, name:'Deepa T.',    rating:5, comment:'Took my parents here and they were blown away by the quality. The choco chip cookies taste like they were baked five minutes ago. Pure comfort!', date:'April 2026' },
+];
+
+const RATING_LABELS: Record<number, string> = {
+  1:'Poor', 2:'Below Average', 3:'Good', 4:'Great', 5:'Excellent!'
+};
+
+function ReviewsSection() {
+  const [reviews, setReviews] = useState<Review[]>(() => {
+    try {
+      const saved = localStorage.getItem('bnb_reviews');
+      return saved ? [...SEED_REVIEWS, ...JSON.parse(saved)] : SEED_REVIEWS;
+    } catch { return SEED_REVIEWS; }
+  });
+
+  const [name,    setName]    = useState('');
+  const [comment, setComment] = useState('');
+  const [rating,  setRating]  = useState(0);
+  const [hovered, setHovered] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError]     = useState('');
+
+  const avgRating = (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1);
+
+  const handleSubmit = () => {
+    if (!name.trim())    { setError('Please enter your name.'); return; }
+    if (rating === 0)    { setError('Please select a star rating.'); return; }
+    if (!comment.trim()) { setError('Please write a short review.'); return; }
+    setError('');
+    const newReview: Review = {
+      id: Date.now(), name: name.trim(), rating, comment: comment.trim(),
+      date: new Date().toLocaleDateString('en-IN', { month:'long', year:'numeric' }),
+    };
+    const updated = [newReview, ...reviews];
+    setReviews(updated);
+    try {
+      const saved = updated.filter(r => !SEED_REVIEWS.some(s => s.id === r.id));
+      localStorage.setItem('bnb_reviews', JSON.stringify(saved));
+    } catch {}
+    setName(''); setComment(''); setRating(0); setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 3000);
+  };
+
+  return (
+    <section aria-label="Customer reviews" className="bg-[#100904] py-16 sm:py-20 px-6 relative" id="reviews">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(212,146,77,.3)] to-transparent"/>
+      <div className="max-w-[960px] mx-auto">
+
+        {/* Header */}
+        <Reveal>
+          <div className="text-center mb-10">
+            <p className="text-[0.72rem] font-bold tracking-[0.14em] uppercase text-[#d4924d] mb-2">Guest Reviews</p>
+            <h2 className="font-['Playfair_Display'] text-[clamp(1.6rem,3.5vw,2.5rem)] text-[#f0b870] font-bold">What Our Guests Say</h2>
+            <div className="w-15 h-[3px] bg-gradient-to-r from-[#9a6530] to-[#f0b870] rounded mt-3.5 mx-auto"/>
+            <div className="mt-5 flex items-center justify-center gap-3">
+              <span className="font-['Playfair_Display'] text-[2.2rem] font-black text-[#d4924d]">{avgRating}</span>
+              <div>
+                <div className="flex gap-0.5">
+                  {[1,2,3,4,5].map(n => (
+                    <svg key={n} width="20" height="20" viewBox="0 0 24 24"
+                      fill={n <= Math.round(Number(avgRating)) ? '#f0b870' : 'none'}
+                      stroke="#f0b870" strokeWidth="1.8">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-[#7a5c3a] text-[0.75rem] mt-0.5">Based on {reviews.length} reviews</p>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+        {/* Review cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4.5 mb-12">
+          {reviews.slice(0, 6).map((r, i) => (
+            <Reveal key={r.id} delay={i * 0.08}>
+              <div className="bg-gradient-to-br from-[#1e1108] to-[#150c04] border border-[rgba(212,146,77,.2)] rounded-2xl p-5 h-full flex flex-col gap-3 hover:border-[rgba(212,146,77,.4)] hover:translate-y-[-5px] transition-all duration-300">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#9a6530] to-[#d4924d] flex items-center justify-center text-white font-bold text-[0.9rem] font-['Playfair_Display'] flex-shrink-0">
+                    {r.name.charAt(0)}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-semibold text-[#f5e6ce] text-[0.88rem] truncate">{r.name}</div>
+                    <div className="text-[#7a5c3a] text-[0.72rem]">{r.date}</div>
+                  </div>
+                  <div className="ml-auto flex gap-0.5 flex-shrink-0">
+                    {[1,2,3,4,5].map(n => (
+                      <svg key={n} width="13" height="13" viewBox="0 0 24 24"
+                        fill={n <= r.rating ? '#f0b870' : 'none'}
+                        stroke="#f0b870" strokeWidth="1.8">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                      </svg>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-[#b8956a] text-[0.84rem] leading-[1.7] flex-1">"{r.comment}"</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* Submission form */}
+        <Reveal delay={0.1}>
+          <div className="bg-gradient-to-br from-[#1e1108] to-[#150c04] border border-[rgba(212,146,77,.25)] rounded-3xl p-6 sm:p-10 shadow-[0_16px_60px_rgba(0,0,0,.5)]">
+            <div className="text-center mb-7">
+              <h3 className="font-['Playfair_Display'] text-[1.4rem] text-[#f0b870] font-bold">Share Your Experience</h3>
+              <p className="text-[#b8956a] text-[0.88rem] mt-1.5">We'd love to hear from you — every review makes us better!</p>
+            </div>
+
+            {submitted ? (
+              <div className="text-center py-6 animate-[slideUp_0.45s_both]">
+                <div className="text-[3rem] mb-3">🎉</div>
+                <h4 className="font-['Playfair_Display'] text-[1.25rem] text-[#f0b870] mb-1.5">Thank you for your review!</h4>
+                <p className="text-[#b8956a] text-[0.88rem]">Your feedback helps us serve you better. See you soon!</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="flex flex-col gap-4">
+                  <div>
+                    <label className="block text-[0.75rem] font-bold tracking-[0.1em] uppercase text-[#7a5c3a] mb-1.5">Your Name</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Priya M."
+                      value={name}
+                      onChange={e => setName(e.target.value)}
+                      maxLength={40}
+                      className="w-full bg-[rgba(255,255,255,.05)] border border-[rgba(212,146,77,.25)] rounded-xl px-4 py-3 text-[#f5e6ce] text-[0.9rem] font-['Inter'] outline-none focus:border-[rgba(212,146,77,.55)] transition-colors placeholder-[#4a3520]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[0.75rem] font-bold tracking-[0.1em] uppercase text-[#7a5c3a] mb-2">Your Rating</label>
+                    <div className="flex gap-1.5 items-center">
+                      {[1,2,3,4,5].map(n => (
+                        <button key={n}
+                          onMouseEnter={() => setHovered(n)}
+                          onMouseLeave={() => setHovered(0)}
+                          onClick={() => setRating(n)}
+                          className="bg-none border-none cursor-pointer p-0.5 hover:scale-115 transition-transform">
+                          <svg width="32" height="32" viewBox="0 0 24 24"
+                            fill={n <= (hovered || rating) ? '#f0b870' : 'none'}
+                            stroke="#f0b870" strokeWidth="1.8"
+                            className="transition-all duration-150">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                          </svg>
+                        </button>
+                      ))}
+                      {(hovered || rating) > 0 && (
+                        <span className="text-[0.82rem] text-[#d4924d] font-semibold ml-1">{RATING_LABELS[hovered || rating]}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-4">
+                  <div className="flex-1 flex flex-col">
+                    <label className="block text-[0.75rem] font-bold tracking-[0.1em] uppercase text-[#7a5c3a] mb-1.5">Your Review</label>
+                    <textarea
+                      placeholder="Tell us about your visit — what did you love?"
+                      value={comment}
+                      onChange={e => setComment(e.target.value)}
+                      rows={4}
+                      maxLength={300}
+                      className="flex-1 w-full bg-[rgba(255,255,255,.05)] border border-[rgba(212,146,77,.25)] rounded-xl px-4 py-3 text-[#f5e6ce] text-[0.9rem] font-['Inter'] outline-none focus:border-[rgba(212,146,77,.55)] transition-colors resize-none placeholder-[#4a3520]"
+                    />
+                    <div className="text-right text-[0.7rem] text-[#4a3520] mt-1">{comment.length}/300</div>
+                  </div>
+                </div>
+                <div className="md:col-span-2">
+                  {error && (
+                    <p className="text-[#ef4444] text-[0.84rem] mb-3 flex items-center gap-2">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      {error}
+                    </p>
+                  )}
+                  <button
+                    onClick={handleSubmit}
+                    className="w-full bg-gradient-to-br from-[#9a6530] via-[#d4924d] to-[#f0b870] text-white border-none rounded-xl py-3.5 text-base font-bold cursor-pointer font-['Inter'] shadow-[0_4px_20px_rgba(212,146,77,.3)] hover:shadow-[0_6px_28px_rgba(212,146,77,.45)] hover:translate-y-[-2px] transition-all duration-300 flex items-center justify-center gap-2">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                    </svg>
+                    Submit Review
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </Reveal>
+      </div>
+    </section>
   );
 }
 
