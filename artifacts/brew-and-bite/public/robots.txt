@@ -1,2 +1,8 @@
 User-agent: *
 Allow: /
+
+# Sitemaps
+Sitemap: https://brewandbite.in/sitemap.xml
+
+# Crawl-delay (optional, be polite to bots)
+Crawl-delay: 1

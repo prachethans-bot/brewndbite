@@ -1,0 +1,95 @@
+# ADDITIONAL PREMIUM FEATURES
+
+Enhance the existing website by adding the following features while preserving the current design, branding, layout, and functionality. Do not redesign the website from scratch.
+
+---
+
+# 1. SEO OPTIMIZATION
+
+Optimize the website for search engines and social sharing.
+
+Implement:
+
+* Unique Meta Title for every page
+* Meta Description
+* Meta Keywords
+* Canonical URLs
+* Open Graph Tags
+* Twitter Card Tags
+* Proper HTML title tags
+* Semantic HTML5 elements
+* Structured Data (JSON-LD) for Local Business
+* Restaurant/Café schema markup
+* Breadcrumb schema where applicable
+* XML Sitemap (sitemap.xml)
+* robots.txt
+* Proper favicon
+* Optimized image alt text
+* Proper heading hierarchy (H1, H2, H3...)
+* Clean URLs
+* Descriptive page names
+* Internal linking where appropriate
+
+Ensure the website achieves excellent SEO best practices.
+
+---
+
+# 2. PERFORMANCE OPTIMIZATION
+
+Improve overall website speed and user experience.
+
+Implement:
+
+* Lazy loading for all images
+* Image optimization
+* Responsive image sizes
+* Code splitting
+* Component lazy loading
+* Reduce unnecessary re-renders
+* Optimize animations for 60 FPS
+* Minimize bundle size
+* Efficient React rendering
+* Loading skeletons
+* Optimized fonts
+* Proper caching strategy
+* Minified assets
+* Smooth scrolling
+* Fast initial page load
+* Lighthouse Performance score above 90 where possible
+
+Ensure there are no performance bottlenecks.
+
+---
+
+# 3. GOOGLE MAPS
+
+Replace any placeholder location with an interactive Google Maps section.
+
+Requirements:
+
+* Embed Google Map
+* Center it on the café location
+* Beautiful rounded container
+* "Get Directions" button
+* "Open in Google Maps" button
+* Location icon
+* Display address below the map
+* Responsive design
+* Smooth entrance animation
+* Maintain the existing design language
+
+---
+
+# 4. QR MENU
+
+Create a premium "Scan Menu" section.
+
+Include:
+
+* Large QR Code placeholder
+* Heading:
+  "Scan to View Our Digital Menu"
+* Short description encouraging customers to scan
+* Download Menu PDF button
+* Share Menu button
+*

@@ -598,6 +598,11 @@ function MenuCard({ item, onDetails, onAdd, delay }:
 // ── Home Page ────────────────────────────────────────────────────────────────
 function HomePage({ onDetails, onAdd }:
   { onDetails: (i: MenuItem) => void; onAdd: (i: MenuItem) => void }) {
+  useEffect(() => {
+    document.title = 'Brew & Bite Cafe | Premium Coffee & Fresh Food in Koramangala, Bengaluru';
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute('content', 'Brew & Bite Cafe in Koramangala, Bengaluru — premium artisan coffee, fresh handcrafted food, and cozy vibes. Open 7 AM–10 PM daily. Order online or visit us today!');
+  }, []);
   return (
     <>
       <div className="min-h-screen flex flex-col items-center justify-center text-center pt-28 sm:pt-32 pb-16 sm:pb-20 px-6 relative overflow-hidden bg-[radial-gradient(ellipse_80%_55%_at_50%_10%,#3d1f06_0%,#100904_68%)]">
@@ -628,7 +633,7 @@ function HomePage({ onDetails, onAdd }:
         </div>
       </div>
 
-      <div className="bg-[#1a0f06] pb-20 sm:pb-22 relative">
+      <div className="bg-[#1a0f06] pb-20 sm:pb-22 relative" id="menu">
         <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#d4924d] to-transparent"/>
         <div className="text-center pt-16 sm:pt-20 pb-10 sm:pb-11 px-6">
           <Reveal>
@@ -643,6 +648,9 @@ function HomePage({ onDetails, onAdd }:
           ))}
         </div>
       </div>
+
+      <GoogleMapsSection/>
+      <QRMenuSection/>
 
       <footer className="bg-[#1e1108] border-t border-[rgba(212,146,77,.2)] py-9 text-center px-6">
         <div className="flex items-center justify-center gap-2.5 font-['Playfair_Display'] text-[1.15rem] text-[#d4924d] mb-2.5">
@@ -717,8 +725,184 @@ function SocialMediaSection() {
   );
 }
 
+// ── Google Maps Section ──────────────────────────────────────────────────────
+function GoogleMapsSection() {
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const { ref, visible } = useReveal();
+  const address = 'Koramangala, Bengaluru, Karnataka 560034, India';
+  const mapsQuery = encodeURIComponent('Koramangala Bengaluru India');
+  const embedUrl = `https://maps.google.com/maps?q=${mapsQuery}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
+  const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${mapsQuery}`;
+  const openUrl = `https://www.google.com/maps/search/${mapsQuery}`;
+  return (
+    <section aria-label="Location and directions" className="bg-[#100904] py-16 sm:py-20 px-6 relative" id="location">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(212,146,77,.3)] to-transparent"/>
+      <div className="max-w-[900px] mx-auto">
+        <Reveal>
+          <div className="text-center mb-11">
+            <p className="text-[0.72rem] font-bold tracking-[0.14em] uppercase text-[#d4924d] mb-2">Find Us</p>
+            <h2 className="font-['Playfair_Display'] text-[clamp(1.6rem,3.5vw,2.5rem)] text-[#f0b870] font-bold">Visit Brew & Bite</h2>
+            <div className="w-15 h-[3px] bg-gradient-to-r from-[#9a6530] to-[#f0b870] rounded mt-3.5 mx-auto"/>
+            <p className="mt-4 text-[#b8956a] text-[0.95rem] max-w-[480px] mx-auto leading-[1.75]">We're nestled in the heart of Koramangala — easy to find, hard to leave.</p>
+          </div>
+        </Reveal>
+        <div ref={ref} className={`transition-[opacity,transform] duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-9'}`}>
+          <div className="relative rounded-2xl overflow-hidden border border-[rgba(212,146,77,.25)] shadow-[0_16px_60px_rgba(0,0,0,.6)]">
+            {!mapLoaded && (
+              <div className="absolute inset-0 bg-[#1e1108] flex items-center justify-center z-10">
+                <div className="flex flex-col items-center gap-3 text-[#b8956a]">
+                  <div className="w-10 h-10 border-[3px] border-[rgba(212,146,77,.2)] border-t-[#d4924d] rounded-full animate-spin"/>
+                  <span className="text-[0.85rem]">Loading map…</span>
+                </div>
+              </div>
+            )}
+            <iframe
+              title="Brew & Bite Cafe location on Google Maps — Koramangala, Bengaluru"
+              src={embedUrl}
+              width="100%"
+              height="380"
+              style={{ border: 0, display: 'block' }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              onLoad={() => setMapLoaded(true)}
+              aria-label="Interactive Google Map showing Brew & Bite Cafe in Koramangala, Bengaluru"
+            />
+          </div>
+          <div className="mt-5 flex flex-col sm:flex-row items-center gap-4">
+            <div className="flex items-start gap-3 flex-1 bg-[rgba(212,146,77,.07)] border border-[rgba(212,146,77,.2)] rounded-[14px] px-4.5 py-4">
+              <div className="w-9 h-9 rounded-[10px] flex-shrink-0 bg-gradient-to-br from-[#78350f] to-[#d97706] flex items-center justify-center">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                </svg>
+              </div>
+              <div>
+                <div className="text-[0.72rem] font-bold tracking-[0.1em] uppercase text-[#7a5c3a] mb-0.5">Address</div>
+                <address className="text-[0.88rem] text-[#f5e6ce] font-medium not-italic leading-[1.55]">{address}</address>
+              </div>
+            </div>
+            <div className="flex gap-3 flex-shrink-0 flex-col xs:flex-row w-full sm:w-auto">
+              <a href={directionsUrl} target="_blank" rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 bg-gradient-to-br from-[#9a6530] to-[#d4924d] text-white rounded-[14px] px-5 py-3 text-[0.88rem] font-semibold cursor-pointer no-underline transition-all duration-300 hover:shadow-[0_6px_24px_rgba(212,146,77,.4)] hover:translate-y-[-2px]">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+                </svg>
+                Get Directions
+              </a>
+              <a href={openUrl} target="_blank" rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 bg-[rgba(212,146,77,.1)] border border-[rgba(212,146,77,.3)] text-[#d4924d] rounded-[14px] px-5 py-3 text-[0.88rem] font-semibold cursor-pointer no-underline transition-all duration-300 hover:bg-[rgba(212,146,77,.18)] hover:translate-y-[-2px]">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+                Open in Maps
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── QR Menu Section ──────────────────────────────────────────────────────────
+function QRMenuSection() {
+  const [shared, setShared] = useState(false);
+  const menuUrl = 'https://brewandbite.in/#menu';
+  const qrUrl   = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&bgcolor=1e1108&color=f0b870&qzone=1&data=${encodeURIComponent(menuUrl)}`;
+
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'Brew & Bite Menu', text: 'Check out the menu at Brew & Bite Cafe!', url: menuUrl });
+      } else {
+        await navigator.clipboard.writeText(menuUrl);
+        setShared(true);
+        setTimeout(() => setShared(false), 2500);
+      }
+    } catch {
+      try { await navigator.clipboard.writeText(menuUrl); setShared(true); setTimeout(() => setShared(false), 2500); } catch {}
+    }
+  };
+
+  return (
+    <section aria-label="Scan digital menu QR code" className="bg-[#1a0f06] py-16 sm:py-20 px-6 relative" id="qr-menu">
+      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#d4924d] to-transparent"/>
+      <div className="max-w-[900px] mx-auto">
+        <div className="bg-gradient-to-br from-[#1e1108] to-[#150c04] border border-[rgba(212,146,77,.25)] rounded-3xl px-6 py-10 sm:px-12 sm:py-14 flex flex-col lg:flex-row items-center gap-10 shadow-[0_16px_60px_rgba(0,0,0,.5)]">
+          <Reveal>
+            <div className="relative flex-shrink-0">
+              <div className="bg-[rgba(212,146,77,.08)] border border-[rgba(212,146,77,.3)] rounded-2xl p-4 shadow-[0_8px_32px_rgba(0,0,0,.4)]">
+                <img
+                  src={qrUrl}
+                  alt="QR code to scan and view Brew & Bite digital menu"
+                  width="220"
+                  height="220"
+                  loading="lazy"
+                  className="rounded-[10px] block"
+                />
+              </div>
+              <div className="absolute -top-3 -right-3 w-9 h-9 bg-gradient-to-br from-[#9a6530] to-[#f0b870] rounded-full flex items-center justify-center shadow-[0_4px_14px_rgba(212,146,77,.4)] animate-[pulse_2.5s_infinite]">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                  <path d="M14 14h3v3M17 20h3M20 17v3"/>
+                </svg>
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <div className="text-center lg:text-left flex-1 max-w-[460px]">
+              <p className="text-[0.72rem] font-bold tracking-[0.14em] uppercase text-[#d4924d] mb-2">Digital Menu</p>
+              <h2 className="font-['Playfair_Display'] text-[clamp(1.5rem,3.5vw,2.2rem)] text-[#f0b870] font-bold leading-[1.2]">Scan to View Our Digital Menu</h2>
+              <div className="w-12 h-[3px] bg-gradient-to-r from-[#9a6530] to-[#f0b870] rounded mt-3.5 lg:mx-0 mx-auto"/>
+              <p className="mt-4 text-[#b8956a] text-[0.95rem] leading-[1.75]">Point your phone camera at the QR code to instantly browse our full menu — no app needed. Save your favourites and order with ease!</p>
+              <div className="mt-7 flex flex-col xs:flex-row gap-3 justify-center lg:justify-start">
+                <a
+                  href="/menu.pdf"
+                  download
+                  onClick={(e) => { e.preventDefault(); window.open(menuUrl, '_blank'); }}
+                  className="flex items-center justify-center gap-2 bg-gradient-to-br from-[#9a6530] to-[#d4924d] text-white rounded-[14px] px-5 py-3 text-[0.88rem] font-semibold cursor-pointer no-underline transition-all duration-300 hover:shadow-[0_6px_24px_rgba(212,146,77,.4)] hover:translate-y-[-2px] font-['Inter']">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  View Full Menu
+                </a>
+                <button
+                  onClick={handleShare}
+                  className={`flex items-center justify-center gap-2 rounded-[14px] px-5 py-3 text-[0.88rem] font-semibold cursor-pointer transition-all duration-300 hover:translate-y-[-2px] font-['Inter'] ${shared ? 'bg-[rgba(34,197,94,.12)] border border-[rgba(34,197,94,.35)] text-[#22c55e]' : 'bg-[rgba(212,146,77,.1)] border border-[rgba(212,146,77,.3)] text-[#d4924d] hover:bg-[rgba(212,146,77,.18)]'}`}>
+                  {shared ? (
+                    <>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      Copied!
+                    </>
+                  ) : (
+                    <>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                      </svg>
+                      Share Menu
+                    </>
+                  )}
+                </button>
+              </div>
+              <p className="mt-5 text-[0.78rem] text-[#7a5c3a] flex items-center gap-1.5 justify-center lg:justify-start">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Works with any smartphone camera — no app required
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ── About Page ───────────────────────────────────────────────────────────────
 function AboutPage() {
+  useEffect(() => {
+    document.title = 'About Us | Brew & Bite Cafe — Our Story, Koramangala Bengaluru';
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute('content', 'Founded in 2018 in Koramangala, Bengaluru, Brew & Bite Cafe is built on a passion for great coffee and honest food. Learn our story, values, and what makes us unique.');
+  }, []);
   return (
     <>
       <div className="bg-[radial-gradient(ellipse_80%_55%_at_50%_0%,#3d1f06_0%,#100904_70%)] pt-20 sm:pt-22 pb-14 sm:pb-15 text-center relative overflow-hidden px-6">
@@ -763,7 +947,7 @@ function AboutPage() {
 
         <Reveal delay={0.14}>
           <div className="relative">
-            <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?w=900&q=80" alt="Inside Brew & Bite Cafe" className="w-full h-56 sm:h-72 object-cover rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,.5)] block"/>
+            <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?w=900&q=80" alt="Inside Brew & Bite Cafe — cozy interior in Koramangala Bengaluru" loading="lazy" className="w-full h-56 sm:h-72 object-cover rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,.5)] block"/>
             <div className="absolute -bottom-5 -right-4 bg-gradient-to-br from-[#9a6530] to-[#d4924d] rounded-2xl px-4.5 py-3.5 shadow-[0_6px_24px_rgba(0,0,0,.45)] flex flex-col items-center gap-1 animate-[pulse_2.8s_infinite]">
               <CupSvg size={28} stroke={1.8}/>
               <span className="font-['Playfair_Display'] text-[0.78rem] font-bold text-white whitespace-nowrap">Brew &amp; Bite</span>
