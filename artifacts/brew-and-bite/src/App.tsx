@@ -157,9 +157,9 @@ function ItemModal({ item, onClose, onAdd }: { item: MenuItem | null; onClose: (
 }
 
 // ── Cart Panel ───────────────────────────────────────────────────────────────
-function CartPanel({ open, onClose, cart, onQty, onRemove, onCheckout }:
+function CartPanel({ open, onClose, cart, onQty, onRemove, onCheckout, onNavigateHome }:
   { open: boolean; onClose: () => void; cart: CartMap;
-    onQty: (id: number, d: number) => void; onRemove: (id: number) => void; onCheckout: () => void }) {
+    onQty: (id: number, d: number) => void; onRemove: (id: number) => void; onCheckout: () => void; onNavigateHome: () => void }) {
   const entries = Object.values(cart);
   const total   = entries.reduce((s, c) => s + c.item.price * c.qty, 0);
   const hasItems = entries.length > 0;
@@ -171,7 +171,7 @@ function CartPanel({ open, onClose, cart, onQty, onRemove, onCheckout }:
             <h3 className="font-['Playfair_Display'] text-[1.3rem] text-[#f0b870]">Your Cart</h3>
             <button onClick={onClose} className="bg-none border-none text-[#b8956a] text-[1.4rem] cursor-pointer hover:text-[#f5e6ce] transition-colors">✕</button>
           </div>
-          <button onClick={onClose} className="flex items-center gap-2 bg-[rgba(212,146,77,.1)] border border-[rgba(212,146,77,.25)] rounded-lg px-4 py-2 text-[#d4924d] text-[0.84rem] font-semibold cursor-pointer w-full font-['Inter'] hover:bg-[rgba(212,146,77,.2)] transition-colors">
+          <button onClick={() => { onClose(); onNavigateHome(); }} className="flex items-center gap-2 bg-[rgba(212,146,77,.1)] border border-[rgba(212,146,77,.25)] rounded-lg px-4 py-2 text-[#d4924d] text-[0.84rem] font-semibold cursor-pointer w-full font-['Inter'] hover:bg-[rgba(212,146,77,.2)] transition-colors">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
               <polyline points="15 18 9 12 15 6"/>
             </svg>
@@ -183,7 +183,7 @@ function CartPanel({ open, onClose, cart, onQty, onRemove, onCheckout }:
             <div className="flex flex-col items-center justify-center h-full gap-3.5 text-[#7a5c3a] text-center">
               <CartSvg size={52}/>
               <p className="text-[0.9rem] leading-[1.6]">Your cart is empty.<br/>Add something delicious!</p>
-              <button onClick={onClose} className="bg-gradient-to-br from-[#9a6530] to-[#d4924d] text-white border-none rounded-lg px-5.5 py-2.5 text-[0.88rem] font-semibold cursor-pointer font-['Inter'] hover:shadow-lg transition-shadow">Browse Menu</button>
+              <button onClick={() => { onClose(); onNavigateHome(); }} className="bg-gradient-to-br from-[#9a6530] to-[#d4924d] text-white border-none rounded-lg px-5.5 py-2.5 text-[0.88rem] font-semibold cursor-pointer font-['Inter'] hover:shadow-lg transition-shadow">Browse Menu</button>
             </div>
           ) : entries.map(({ item, qty }) => (
             <div key={item.id} className="flex gap-3 py-3.5 border-b border-[rgba(212,146,77,.2)] items-center">
@@ -966,7 +966,7 @@ export default function App() {
       </div>
 
       <ItemModal item={modal} onClose={() => setModal(null)} onAdd={addToCart}/>
-      <CartPanel open={cartOpen} onClose={() => setCartOpen(false)} cart={cart} onQty={changeQty} onRemove={removeFromCart} onCheckout={checkout}/>
+      <CartPanel open={cartOpen} onClose={() => setCartOpen(false)} cart={cart} onQty={changeQty} onRemove={removeFromCart} onCheckout={checkout} onNavigateHome={() => navTo('home')}/>
       <PaymentModal open={paymentOpen} amount={paymentAmount} onClose={() => setPaymentOpen(false)} onSuccess={onPaymentSuccess}/>
       <FeedbackModal open={feedback.open} orderId={feedback.orderId} onClose={() => setFeedback(f => ({ ...f, open:false }))}/>
       <Toast msg={toast.msg} show={toast.show}/>
