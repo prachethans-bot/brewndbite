@@ -785,22 +785,6 @@ function AboutPage() {
               ) : <div key={i} className="w-px h-10 bg-[rgba(212,146,77,.25)] mx-3"/>
             )}
           </div>
-          <div className="mt-7 grid grid-cols-2 gap-3">
-            {[
-              { img:chaiImg,   name:'Masala Chai',      price:'₹49' },
-              { img:coffeeImg, name:'Signature Coffee',  price:'₹79' },
-              { img:puffsImg,  name:'Spiced Puffs',      price:'₹59' },
-              { img:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80', name:'Classic Burger', price:'₹149' },
-            ].map(({ img, name, price }) => (
-              <div key={name} className="rounded-xl overflow-hidden relative border border-[rgba(212,146,77,.2)]">
-                <img src={img} alt={name} className="w-full h-20 object-cover block"/>
-                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(8,4,0,.88)] to-transparent flex flex-col justify-end px-2.5 py-2">
-                  <div className="text-[0.75rem] font-semibold text-[#f0b870]">{name}</div>
-                  <div className="text-[0.7rem] text-[#d4924d]">{price}</div>
-                </div>
-              </div>
-            ))}
-          </div>
         </Reveal>
       </div>
 
