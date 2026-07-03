@@ -1,0 +1,55 @@
+I have a café website at brew-nd-bite.vercel.app built with React + TypeScript + Vite + Tailwind CSS.
+
+Make the following changes. Do NOT remove any other existing sections or features.
+
+---
+
+## CHANGE 1 — Remove the Featured/Popular Items Section
+
+Find and completely remove the section that appears near the top of the page that shows featured menu item cards (Choco Milkshake, Cookies, Burger, Tea & Coffee etc.) with "Book Now", "Add to Cart", and "Details" buttons. Delete this entire section and its component.
+
+---
+
+## CHANGE 2 — Remove Cart Icon from Navigation
+
+In the mobile navigation (hamburger menu / top-right area) and the desktop navbar, remove the shopping cart icon and cart item count badge entirely. Do not remove any other nav links.
+
+---
+
+## CHANGE 3 — Reorder These Three Sections
+
+After removing the featured section above, ensure the page order in this exact sequence is:
+
+1. QR Menu Section  ← move this UP, make it appear first after the Hero
+2. Customer Reviews / Testimonials Section  ← comes after QR Menu
+3. Contact / Feedback Form Section  ← comes last
+
+---
+
+## CHANGE 4 — Replace the QR Code Image in the QR Menu Section
+
+In the QR Menu section, find the existing QR code image element (it may be a placeholder or an old QR image). Replace it with this new QR code that links to:
+
+  https://caf-menu-instant.vercel.app/
+
+Use this image URL as the new QR code:
+  https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://caf-menu-instant.vercel.app/&format=png&margin=10
+
+Update the "Scan to View Menu" button or any related link in that section to also point to:
+  https://caf-menu-instant.vercel.app/
+
+If there is a "Download Menu" or "Open Menu" button in the QR section, make it open:
+  https://caf-menu-instant.vercel.app/
+
+Keep the rest of the QR Menu section design exactly as it is.
+
+---
+
+## SUMMARY OF CHANGES
+
+- ❌ Remove: Featured items card section (Book Now / Add to Cart / Details cards)
+- ❌ Remove: Cart icon from the navbar / hamburger menu
+- ✅ Reorder: QR Menu → Reviews → Contact/Feedback
+- ✅ Replace: QR code image and all related links → https://caf-menu-instant.vercel.app/
+
+Do not touch the Hero section, Menu section, Gallery, Reservation form, Footer, or any other part of the site.

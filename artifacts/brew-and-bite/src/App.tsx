@@ -633,25 +633,10 @@ function HomePage({ onDetails, onAdd }:
         </div>
       </div>
 
-      <div className="bg-[#1a0f06] pb-20 sm:pb-22 relative" id="menu">
-        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#d4924d] to-transparent"/>
-        <div className="text-center pt-16 sm:pt-20 pb-10 sm:pb-11 px-6">
-          <Reveal>
-            <h2 className="font-['Playfair_Display'] text-[clamp(1.8rem,4vw,2.9rem)] text-[#d4924d] font-bold">Our Menu</h2>
-            <div className="w-15 h-[3px] bg-gradient-to-r from-[#9a6530] to-[#f0b870] rounded mt-3.5 mx-auto"/>
-            <p className="mt-4 text-[#b8956a] text-[0.97rem] max-w-[520px] mx-auto leading-[1.75]">Explore our carefully curated selection of beverages and delicacies, crafted with the finest ingredients</p>
-          </Reveal>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-5.5 max-w-[940px] mx-auto px-5 sm:px-6">
-          {ITEMS.map((item, i) => (
-            <MenuCard key={item.id} item={item} delay={i*0.09} onDetails={() => onDetails(item)} onAdd={() => onAdd(item)}/>
-          ))}
-        </div>
-      </div>
-
-      <ReviewsSection/>
-      <GoogleMapsSection/>
       <QRMenuSection/>
+      <ReviewsSection/>
+      <ContactSection/>
+      <GoogleMapsSection/>
 
       <footer className="bg-[#1e1108] border-t border-[rgba(212,146,77,.2)] py-9 text-center px-6">
         <div className="flex items-center justify-center gap-2.5 font-['Playfair_Display'] text-[1.15rem] text-[#d4924d] mb-2.5">
@@ -924,6 +909,120 @@ function ReviewsSection() {
   );
 }
 
+// ── Contact Section ───────────────────────────────────────────────────────────
+function ContactSection() {
+  const [cName,    setCName]    = useState('');
+  const [cEmail,   setCEmail]   = useState('');
+  const [cPhone,   setCPhone]   = useState('');
+  const [cMsg,     setCMsg]     = useState('');
+  const [cSent,    setCSent]    = useState(false);
+  const [cErr,     setCErr]     = useState('');
+
+  const handleContact = () => {
+    if (!cName.trim())  { setCErr('Please enter your name.');          return; }
+    if (!cEmail.trim() || !/\S+@\S+\.\S+/.test(cEmail)) { setCErr('Please enter a valid email.'); return; }
+    if (!cMsg.trim())   { setCErr('Please write your message.');       return; }
+    setCErr('');
+    setCSent(true);
+    setTimeout(() => setCSent(false), 4000);
+    setCName(''); setCEmail(''); setCPhone(''); setCMsg('');
+  };
+
+  return (
+    <section aria-label="Contact and feedback" className="bg-[#1a0f06] py-16 sm:py-20 px-6 relative" id="contact">
+      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#d4924d] to-transparent"/>
+      <div className="max-w-[860px] mx-auto">
+        <Reveal>
+          <div className="text-center mb-10">
+            <p className="text-[0.72rem] font-bold tracking-[0.14em] uppercase text-[#d4924d] mb-2">Get in Touch</p>
+            <h2 className="font-['Playfair_Display'] text-[clamp(1.6rem,3.5vw,2.5rem)] text-[#f0b870] font-bold">Contact & Feedback</h2>
+            <div className="w-15 h-[3px] bg-gradient-to-r from-[#9a6530] to-[#f0b870] rounded mt-3.5 mx-auto"/>
+            <p className="mt-4 text-[#b8956a] text-[0.95rem] max-w-[480px] mx-auto leading-[1.75]">Have a question, special request, or feedback? We'd love to hear from you — drop us a message and we'll get back to you shortly.</p>
+          </div>
+        </Reveal>
+
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+          {/* Info sidebar */}
+          <Reveal delay={0.05}>
+            <div className="lg:col-span-2 flex flex-col gap-4">
+              {[
+                { icon: <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>, dot: <circle cx="12" cy="10" r="3"/>, label:'Visit Us', val:'Koramangala, Bengaluru, KA 560034' },
+                { icon: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/>, dot: null, label:'Call Us', val:'+91 98765 43210' },
+                { icon: <><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></>, dot: null, label:'Email Us', val:'hello@brewandbite.in' },
+                { icon: <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>, dot: null, label:'Hours', val:'7:00 AM – 10:00 PM, Daily' },
+              ].map(({ icon, dot, label, val }) => (
+                <div key={label} className="flex gap-3.5 items-start bg-[rgba(212,146,77,.06)] border border-[rgba(212,146,77,.18)] rounded-[14px] px-4 py-3.5">
+                  <div className="w-9 h-9 rounded-[10px] flex-shrink-0 bg-gradient-to-br from-[#78350f] to-[#d97706] flex items-center justify-center">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{icon}{dot}</svg>
+                  </div>
+                  <div>
+                    <div className="text-[0.7rem] font-bold tracking-[0.1em] uppercase text-[#7a5c3a] mb-0.5">{label}</div>
+                    <div className="text-[0.86rem] text-[#f5e6ce] font-medium leading-[1.45]">{val}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+
+          {/* Form */}
+          <Reveal delay={0.12}>
+            <div className="lg:col-span-3 bg-gradient-to-br from-[#1e1108] to-[#150c04] border border-[rgba(212,146,77,.25)] rounded-2xl p-6 sm:p-8 shadow-[0_12px_48px_rgba(0,0,0,.4)]">
+              {cSent ? (
+                <div className="text-center py-8 animate-[slideUp_0.45s_both]">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#9a6530] to-[#d4924d] flex items-center justify-center mx-auto mb-4 shadow-[0_8px_24px_rgba(212,146,77,.35)]">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <h3 className="font-['Playfair_Display'] text-[1.3rem] text-[#f0b870] mb-2">Message sent!</h3>
+                  <p className="text-[#b8956a] text-[0.88rem] leading-[1.65]">Thank you for reaching out. We'll get back to you within 24 hours.</p>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[0.73rem] font-bold tracking-[0.1em] uppercase text-[#7a5c3a] mb-1.5">Full Name <span className="text-[#d4924d]">*</span></label>
+                      <input type="text" placeholder="Your name" value={cName} onChange={e => setCName(e.target.value)} maxLength={50}
+                        className="w-full bg-[rgba(255,255,255,.05)] border border-[rgba(212,146,77,.22)] rounded-xl px-4 py-2.5 text-[#f5e6ce] text-[0.88rem] font-['Inter'] outline-none focus:border-[rgba(212,146,77,.55)] transition-colors placeholder-[#4a3520]"/>
+                    </div>
+                    <div>
+                      <label className="block text-[0.73rem] font-bold tracking-[0.1em] uppercase text-[#7a5c3a] mb-1.5">Email <span className="text-[#d4924d]">*</span></label>
+                      <input type="email" placeholder="your@email.com" value={cEmail} onChange={e => setCEmail(e.target.value)}
+                        className="w-full bg-[rgba(255,255,255,.05)] border border-[rgba(212,146,77,.22)] rounded-xl px-4 py-2.5 text-[#f5e6ce] text-[0.88rem] font-['Inter'] outline-none focus:border-[rgba(212,146,77,.55)] transition-colors placeholder-[#4a3520]"/>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[0.73rem] font-bold tracking-[0.1em] uppercase text-[#7a5c3a] mb-1.5">Phone <span className="text-[#7a5c3a] font-normal normal-case">(optional)</span></label>
+                    <input type="tel" placeholder="+91 98765 43210" value={cPhone} onChange={e => setCPhone(e.target.value)} maxLength={15}
+                      className="w-full bg-[rgba(255,255,255,.05)] border border-[rgba(212,146,77,.22)] rounded-xl px-4 py-2.5 text-[#f5e6ce] text-[0.88rem] font-['Inter'] outline-none focus:border-[rgba(212,146,77,.55)] transition-colors placeholder-[#4a3520]"/>
+                  </div>
+                  <div>
+                    <label className="block text-[0.73rem] font-bold tracking-[0.1em] uppercase text-[#7a5c3a] mb-1.5">Message <span className="text-[#d4924d]">*</span></label>
+                    <textarea placeholder="Tell us how we can help, or share your feedback…" value={cMsg} onChange={e => setCMsg(e.target.value)} rows={4} maxLength={500}
+                      className="w-full bg-[rgba(255,255,255,.05)] border border-[rgba(212,146,77,.22)] rounded-xl px-4 py-2.5 text-[#f5e6ce] text-[0.88rem] font-['Inter'] outline-none focus:border-[rgba(212,146,77,.55)] transition-colors resize-none placeholder-[#4a3520]"/>
+                    <div className="text-right text-[0.7rem] text-[#4a3520] mt-0.5">{cMsg.length}/500</div>
+                  </div>
+                  {cErr && (
+                    <p className="text-[#ef4444] text-[0.83rem] flex items-center gap-1.5">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      {cErr}
+                    </p>
+                  )}
+                  <button onClick={handleContact}
+                    className="w-full bg-gradient-to-br from-[#9a6530] via-[#d4924d] to-[#f0b870] text-white border-none rounded-xl py-3.5 text-base font-bold cursor-pointer font-['Inter'] shadow-[0_4px_20px_rgba(212,146,77,.3)] hover:shadow-[0_6px_28px_rgba(212,146,77,.45)] hover:translate-y-[-2px] transition-all duration-300 flex items-center justify-center gap-2">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    </svg>
+                    Send Message
+                  </button>
+                </div>
+              )}
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ── Google Maps Section ──────────────────────────────────────────────────────
 function GoogleMapsSection() {
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -1005,8 +1104,8 @@ function GoogleMapsSection() {
 // ── QR Menu Section ──────────────────────────────────────────────────────────
 function QRMenuSection() {
   const [shared, setShared] = useState(false);
-  const menuUrl = 'https://brewandbite.in/#menu';
-  const qrUrl   = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&bgcolor=1e1108&color=f0b870&qzone=1&data=${encodeURIComponent(menuUrl)}`;
+  const menuUrl = 'https://caf-menu-instant.vercel.app/';
+  const qrUrl   = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://caf-menu-instant.vercel.app/&format=png&margin=10';
 
   const handleShare = async () => {
     try {
@@ -1311,12 +1410,6 @@ export default function App() {
               <button key={p} onClick={() => navTo(p)} className={`${page===p ? 'bg-[rgba(212,146,77,.1)] text-[#d4924d]' : 'text-[#b8956a]'} border-none cursor-pointer text-[0.9rem] font-medium px-3.5 py-1.75 rounded-lg tracking-[0.04em] transition-all duration-[360ms] font-['Inter'] capitalize hover:text-[#d4924d]`}>{p}</button>
             ))}
           </div>
-          <button onClick={() => setCartOpen(true)} className="relative bg-gradient-to-br from-[#9a6530] to-[#d4924d] border-none rounded-xl px-4.5 py-2 text-white text-[0.88rem] font-semibold cursor-pointer flex items-center gap-1.75 font-['Inter'] hover:shadow-lg transition-shadow">
-            <CartSvg size={17}/> Cart
-            {cartCount > 0 && (
-              <span className="absolute -top-1.75 -right-1.75 bg-[#ef4444] text-white text-[0.62rem] font-extrabold w-[19px] h-[19px] rounded-full flex items-center justify-center border-2 border-[#100904]">{cartCount}</span>
-            )}
-          </button>
         </div>
 
         {/* Mobile hamburger */}
@@ -1332,12 +1425,6 @@ export default function App() {
             {(['home','about'] as const).map(p => (
               <button key={p} onClick={() => navTo(p)} className={`${page===p ? 'text-[#d4924d]' : 'text-[#b8956a]'} border-none cursor-pointer text-lg font-medium py-2 text-left font-['Inter'] capitalize transition-colors`}>{p}</button>
             ))}
-            <button onClick={() => { setCartOpen(true); setMobileMenuOpen(false); }} className="relative bg-gradient-to-br from-[#9a6530] to-[#d4924d] border-none rounded-xl px-5 py-3 text-white text-base font-semibold cursor-pointer flex items-center justify-center gap-2 font-['Inter'] mt-2">
-              <CartSvg size={18}/> Cart
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-[#ef4444] text-white text-[0.7rem] font-extrabold w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#100904]">{cartCount}</span>
-              )}
-            </button>
           </div>
         </div>
       </div>
