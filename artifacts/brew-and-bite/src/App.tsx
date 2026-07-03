@@ -634,9 +634,9 @@ function HomePage({ onDetails, onAdd }:
       </div>
 
       <QRMenuSection/>
+      <GoogleMapsSection/>
       <ReviewsSection/>
       <ContactSection/>
-      <GoogleMapsSection/>
 
       <footer className="bg-[#1e1108] border-t border-[rgba(212,146,77,.2)] py-9 text-center px-6">
         <div className="flex items-center justify-center gap-2.5 font-['Playfair_Display'] text-[1.15rem] text-[#d4924d] mb-2.5">
