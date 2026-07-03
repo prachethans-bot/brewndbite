@@ -88,10 +88,10 @@ function useReveal() {
   }, []);
   return { ref, visible };
 }
-function Reveal({ children, delay=0 }: { children: React.ReactNode; delay?: number }) {
+function Reveal({ children, delay=0, className='' }: { children: React.ReactNode; delay?: number; className?: string }) {
   const { ref, visible } = useReveal();
   return (
-    <div ref={ref} className={`transition-[opacity,transform] duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-9'}`}
+    <div ref={ref} className={`transition-[opacity,transform] duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-9'} ${className}`}
       style={{ transitionDelay: `${delay}s` }}>
       {children}
     </div>
@@ -943,8 +943,8 @@ function ContactSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
           {/* Info sidebar */}
-          <Reveal delay={0.05}>
-            <div className="lg:col-span-2 flex flex-col gap-4">
+          <Reveal delay={0.05} className="lg:col-span-2">
+            <div className="flex flex-col gap-4">
               {[
                 { icon: <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>, dot: <circle cx="12" cy="10" r="3"/>, label:'Visit Us', val:'Koramangala, Bengaluru, KA 560034' },
                 { icon: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/>, dot: null, label:'Call Us', val:'+91 98765 43210' },
@@ -965,8 +965,8 @@ function ContactSection() {
           </Reveal>
 
           {/* Form */}
-          <Reveal delay={0.12}>
-            <div className="lg:col-span-3 bg-gradient-to-br from-[#1e1108] to-[#150c04] border border-[rgba(212,146,77,.25)] rounded-2xl p-6 sm:p-8 shadow-[0_12px_48px_rgba(0,0,0,.4)]">
+          <Reveal delay={0.12} className="lg:col-span-3">
+            <div className="bg-gradient-to-br from-[#1e1108] to-[#150c04] border border-[rgba(212,146,77,.25)] rounded-2xl p-5 sm:p-8 shadow-[0_12px_48px_rgba(0,0,0,.4)]">
               {cSent ? (
                 <div className="text-center py-8 animate-[slideUp_0.45s_both]">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#9a6530] to-[#d4924d] flex items-center justify-center mx-auto mb-4 shadow-[0_8px_24px_rgba(212,146,77,.35)]">
@@ -1078,7 +1078,7 @@ function GoogleMapsSection() {
                 <address className="text-[0.88rem] text-[#f5e6ce] font-medium not-italic leading-[1.55]">{address}</address>
               </div>
             </div>
-            <div className="flex gap-3 flex-shrink-0 flex-col xs:flex-row w-full sm:w-auto">
+            <div className="flex gap-3 flex-shrink-0 flex-col sm:flex-row w-full sm:w-auto">
               <a href={directionsUrl} target="_blank" rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 bg-gradient-to-br from-[#9a6530] to-[#d4924d] text-white rounded-[14px] px-5 py-3 text-[0.88rem] font-semibold cursor-pointer no-underline transition-all duration-300 hover:shadow-[0_6px_24px_rgba(212,146,77,.4)] hover:translate-y-[-2px]">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1152,7 +1152,7 @@ function QRMenuSection() {
               <h2 className="font-['Playfair_Display'] text-[clamp(1.5rem,3.5vw,2.2rem)] text-[#f0b870] font-bold leading-[1.2]">Scan to View Our Digital Menu</h2>
               <div className="w-12 h-[3px] bg-gradient-to-r from-[#9a6530] to-[#f0b870] rounded mt-3.5 lg:mx-0 mx-auto"/>
               <p className="mt-4 text-[#b8956a] text-[0.95rem] leading-[1.75]">Point your phone camera at the QR code to instantly browse our full menu — no app needed. Save your favourites and order with ease!</p>
-              <div className="mt-7 flex flex-col xs:flex-row gap-3 justify-center lg:justify-start">
+              <div className="mt-7 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
                 <a
                   href="/menu.pdf"
                   download
