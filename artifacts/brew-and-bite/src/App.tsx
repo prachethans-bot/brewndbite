@@ -901,21 +901,6 @@ function ContactSection() {
           </Reveal>
         </div>
 
-        {/* Star rating row */}
-        <Reveal delay={0.2}>
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
-            <div className="flex gap-1">
-              {[1,2,3,4,5].map(n => (
-                <svg key={n} width="22" height="22" viewBox="0 0 24 24"
-                  fill="#f0b870" stroke="#f0b870" strokeWidth="1.5">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                </svg>
-              ))}
-            </div>
-            <span className="font-['Playfair_Display'] text-[1.05rem] font-bold text-[#d4924d]">4.8 / 5</span>
-            <span className="text-[#7a5c3a] text-[0.82rem]">— Rated by {SEED_REVIEWS.length} guests</span>
-          </div>
-        </Reveal>
       </div>
     </section>
   );
