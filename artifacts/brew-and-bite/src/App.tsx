@@ -6,7 +6,6 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 import chaiImg      from '@assets/istockphoto-614533094-612x612_1782735711394.jpg';
 import puffsImg     from '@assets/image_1782735974246.png';
 import coffeeImg    from '@assets/image_1782736035803.png';
-import phonepeQrImg from '@assets/e0caf102-a521-4ac9-89dc-608f8cce9366_1783415012576.jpg';
 
 const UPI_ID   = 'keerthanak@ybl';
 const UPI_NAME = 'KEERTHANA K';
@@ -1111,7 +1110,14 @@ function QRMenuSection() {
 
 // ── UPI Payment Section ───────────────────────────────────────────────────────
 function UpiPaymentSection() {
-  const upiLink = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(UPI_NAME)}&cu=INR`;
+  const [amount, setAmount] = useState('');
+
+  const upiLink = amount
+    ? `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(UPI_NAME)}&am=${amount}&cu=INR&tn=Brew%20%26%20Bite%20Cafe`
+    : `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(UPI_NAME)}&cu=INR`;
+
+  const numericAmount = parseFloat(amount);
+  const isValid = !amount || (!isNaN(numericAmount) && numericAmount > 0);
 
   return (
     <section aria-label="UPI Payment" className="bg-[#100904] py-14 px-6 relative" id="pay">
@@ -1124,29 +1130,46 @@ function UpiPaymentSection() {
             <div className="w-10 h-[3px] bg-gradient-to-r from-[#9a6530] to-[#f0b870] rounded mt-3 mx-auto"/>
             <p className="mt-4 text-[#b8956a] text-[0.9rem] leading-[1.7]">Scan this QR code with any UPI app to make a quick and secure payment.</p>
 
-            <div className="mt-8 flex justify-center">
+            <div className="mt-7 flex justify-center">
               <div className="bg-white rounded-2xl p-3 shadow-[0_8px_32px_rgba(0,0,0,.5)] inline-block">
                 <img
-                  src={phonepeQrImg}
+                  src="/image.png"
                   alt="UPI QR code — scan to pay"
-                  className="block w-[220px] h-auto rounded-[10px]"
+                  className="block w-[220px] h-[220px] object-contain rounded-[10px]"
                   loading="lazy"
                 />
               </div>
             </div>
 
+            <div className="mt-7 relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#d4924d] font-semibold text-[1rem] pointer-events-none">₹</span>
+              <input
+                type="number"
+                min="1"
+                step="1"
+                placeholder="Enter amount (optional)"
+                value={amount}
+                onChange={e => setAmount(e.target.value)}
+                className="w-full bg-[rgba(255,255,255,.05)] border border-[rgba(212,146,77,.3)] rounded-[12px] pl-8 pr-4 py-3 text-[#f0d090] text-[0.95rem] placeholder:text-[#5a3f20] outline-none focus:border-[rgba(212,146,77,.7)] focus:bg-[rgba(255,255,255,.08)] transition-all duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
+            </div>
+            {amount && !isValid && (
+              <p className="mt-1.5 text-[0.75rem] text-red-400 text-left">Please enter a valid amount</p>
+            )}
+
             <a
-              href={upiLink}
-              className="mt-8 inline-flex items-center justify-center gap-2.5 bg-gradient-to-br from-[#9a6530] to-[#d4924d] text-white rounded-[14px] px-7 py-3.5 text-[0.95rem] font-semibold cursor-pointer no-underline transition-all duration-300 hover:shadow-[0_6px_24px_rgba(212,146,77,.4)] hover:translate-y-[-2px] font-['Inter'] shadow-[0_4px_16px_rgba(212,146,77,.25)]"
+              href={isValid ? upiLink : undefined}
+              onClick={e => { if (!isValid) e.preventDefault(); }}
+              className={`mt-5 inline-flex w-full items-center justify-center gap-2.5 bg-gradient-to-br from-[#9a6530] to-[#d4924d] text-white rounded-[14px] px-7 py-3.5 text-[0.95rem] font-semibold no-underline transition-all duration-300 font-['Inter'] shadow-[0_4px_16px_rgba(212,146,77,.25)] ${isValid ? 'cursor-pointer hover:shadow-[0_6px_24px_rgba(212,146,77,.4)] hover:translate-y-[-2px]' : 'opacity-50 cursor-not-allowed'}`}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
                 <line x1="1" y1="10" x2="23" y2="10"/>
               </svg>
-              Pay Now with UPI
+              {amount && isValid ? `Pay ₹${numericAmount} with UPI` : 'Pay Now with UPI'}
             </a>
 
-            <p className="mt-5 text-[0.78rem] text-[#7a5c3a] flex items-center gap-1.5 justify-center">
+            <p className="mt-4 text-[0.78rem] text-[#7a5c3a] flex items-center gap-1.5 justify-center">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               Secure payment via any UPI app
             </p>
