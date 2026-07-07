@@ -797,8 +797,12 @@ function ContactSection() {
   const [cEmail,   setCEmail]   = useState('');
   const [cPhone,   setCPhone]   = useState('');
   const [cMsg,     setCMsg]     = useState('');
+  const [cRating,  setCRating]  = useState(0);
+  const [cHovered, setCHovered] = useState(0);
   const [cSent,    setCSent]    = useState(false);
   const [cErr,     setCErr]     = useState('');
+
+  const STAR_LABELS: Record<number,string> = { 1:'Poor', 2:'Fair', 3:'Good', 4:'Great', 5:'Excellent!' };
 
   const handleContact = () => {
     if (!cName.trim())  { setCErr('Please enter your name.');          return; }
@@ -807,7 +811,7 @@ function ContactSection() {
     setCErr('');
     setCSent(true);
     setTimeout(() => setCSent(false), 4000);
-    setCName(''); setCEmail(''); setCPhone(''); setCMsg('');
+    setCName(''); setCEmail(''); setCPhone(''); setCMsg(''); setCRating(0);
   };
 
   return (
@@ -881,6 +885,29 @@ function ContactSection() {
                     <textarea placeholder="Tell us how we can help, or share your feedback…" value={cMsg} onChange={e => setCMsg(e.target.value)} rows={4} maxLength={500}
                       className="w-full bg-[rgba(255,255,255,.05)] border border-[rgba(212,146,77,.22)] rounded-xl px-4 py-2.5 text-[#f5e6ce] text-[0.88rem] font-['Inter'] outline-none focus:border-[rgba(212,146,77,.55)] transition-colors resize-none placeholder-[#4a3520]"/>
                     <div className="text-right text-[0.7rem] text-[#4a3520] mt-0.5">{cMsg.length}/500</div>
+                  </div>
+                  {/* Star rating */}
+                  <div>
+                    <label className="block text-[0.73rem] font-bold tracking-[0.1em] uppercase text-[#7a5c3a] mb-2">Rate Your Experience <span className="text-[#7a5c3a] font-normal normal-case">(optional)</span></label>
+                    <div className="flex items-center gap-1.5">
+                      {[1,2,3,4,5].map(n => (
+                        <button key={n} type="button"
+                          onMouseEnter={() => setCHovered(n)}
+                          onMouseLeave={() => setCHovered(0)}
+                          onClick={() => setCRating(cRating === n ? 0 : n)}
+                          className="bg-transparent border-none p-0.5 cursor-pointer transition-transform duration-150 hover:scale-110">
+                          <svg width="30" height="30" viewBox="0 0 24 24"
+                            fill={n <= (cHovered || cRating) ? '#f0b870' : 'none'}
+                            stroke="#f0b870" strokeWidth="1.8"
+                            className="transition-all duration-150">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                          </svg>
+                        </button>
+                      ))}
+                      {(cHovered || cRating) > 0 && (
+                        <span className="text-[0.82rem] text-[#d4924d] font-semibold ml-1">{STAR_LABELS[cHovered || cRating]}</span>
+                      )}
+                    </div>
                   </div>
                   {cErr && (
                     <p className="text-[#ef4444] text-[0.83rem] flex items-center gap-1.5">
