@@ -1111,21 +1111,48 @@ function QRMenuSection() {
 
 // ── UPI Payment Section ───────────────────────────────────────────────────────
 function UpiPaymentSection() {
+  const upiLink = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(UPI_NAME)}&cu=INR`;
+
   return (
     <section aria-label="UPI Payment" className="bg-[#100904] py-14 px-6 relative" id="pay">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(212,146,77,.3)] to-transparent"/>
-      <Reveal>
-        <div className="flex justify-center">
-          <div className="bg-white rounded-2xl p-3 shadow-[0_8px_32px_rgba(0,0,0,.5)] inline-block">
-            <img
-              src={phonepeQrImg}
-              alt="PhonePe UPI QR code — scan to pay KEERTHANA K"
-              className="block w-[240px] h-auto rounded-[10px]"
-              loading="lazy"
-            />
+      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#d4924d] to-transparent"/>
+      <div className="max-w-[420px] mx-auto">
+        <Reveal>
+          <div className="bg-gradient-to-br from-[#1e1108] to-[#150c04] border border-[rgba(212,146,77,.25)] rounded-3xl p-8 sm:p-10 shadow-[0_16px_60px_rgba(0,0,0,.5)] text-center">
+            <p className="text-[0.72rem] font-bold tracking-[0.14em] uppercase text-[#d4924d] mb-3">UPI Payment</p>
+            <h2 className="font-['Playfair_Display'] text-[clamp(1.4rem,3vw,1.9rem)] text-[#f0b870] font-bold leading-[1.2]">Scan to Pay</h2>
+            <div className="w-10 h-[3px] bg-gradient-to-r from-[#9a6530] to-[#f0b870] rounded mt-3 mx-auto"/>
+            <p className="mt-4 text-[#b8956a] text-[0.9rem] leading-[1.7]">Scan this QR code with any UPI app to make a quick and secure payment.</p>
+
+            <div className="mt-8 flex justify-center">
+              <div className="bg-white rounded-2xl p-3 shadow-[0_8px_32px_rgba(0,0,0,.5)] inline-block">
+                <img
+                  src={phonepeQrImg}
+                  alt="UPI QR code — scan to pay"
+                  className="block w-[220px] h-auto rounded-[10px]"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+
+            <a
+              href={upiLink}
+              className="mt-8 inline-flex items-center justify-center gap-2.5 bg-gradient-to-br from-[#9a6530] to-[#d4924d] text-white rounded-[14px] px-7 py-3.5 text-[0.95rem] font-semibold cursor-pointer no-underline transition-all duration-300 hover:shadow-[0_6px_24px_rgba(212,146,77,.4)] hover:translate-y-[-2px] font-['Inter'] shadow-[0_4px_16px_rgba(212,146,77,.25)]"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                <line x1="1" y1="10" x2="23" y2="10"/>
+              </svg>
+              Pay Now with UPI
+            </a>
+
+            <p className="mt-5 text-[0.78rem] text-[#7a5c3a] flex items-center gap-1.5 justify-center">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Secure payment via any UPI app
+            </p>
           </div>
-        </div>
-      </Reveal>
+        </Reveal>
+      </div>
     </section>
   );
 }
