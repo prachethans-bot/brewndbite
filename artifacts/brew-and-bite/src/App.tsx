@@ -1111,65 +1111,21 @@ function QRMenuSection() {
 
 // ── UPI Payment Section ───────────────────────────────────────────────────────
 function UpiPaymentSection() {
-  const upiLink = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&cu=INR`;
-
   return (
-    <section aria-label="UPI Payment" className="bg-[#100904] py-16 sm:py-20 px-6 relative" id="pay">
+    <section aria-label="UPI Payment" className="bg-[#100904] py-14 px-6 relative" id="pay">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(212,146,77,.3)] to-transparent"/>
-      <div className="max-w-[700px] mx-auto">
-        <Reveal>
-          <div className="text-center mb-8">
-            <p className="text-[0.72rem] font-bold tracking-[0.14em] uppercase text-[#d4924d] mb-2">Quick Payment</p>
-            <h2 className="font-['Playfair_Display'] text-[clamp(1.6rem,3.5vw,2.5rem)] text-[#f0b870] font-bold">Pay via UPI</h2>
-            <div className="w-15 h-[3px] bg-gradient-to-r from-[#9a6530] to-[#f0b870] rounded mt-3.5 mx-auto"/>
-            <p className="mt-4 text-[#b8956a] text-[0.95rem] leading-[1.75]">Scan with any UPI app — PhonePe, GPay, Paytm — or tap the button below to pay instantly.</p>
+      <Reveal>
+        <div className="flex justify-center">
+          <div className="bg-white rounded-2xl p-3 shadow-[0_8px_32px_rgba(0,0,0,.5)] inline-block">
+            <img
+              src={phonepeQrImg}
+              alt="PhonePe UPI QR code — scan to pay KEERTHANA K"
+              className="block w-[240px] h-auto rounded-[10px]"
+              loading="lazy"
+            />
           </div>
-        </Reveal>
-
-        <Reveal delay={0.1}>
-          <div className="bg-gradient-to-br from-[#1e1108] to-[#150c04] border border-[rgba(212,146,77,.25)] rounded-3xl p-6 sm:p-10 shadow-[0_16px_60px_rgba(0,0,0,.5)] flex flex-col items-center gap-7">
-            {/* PhonePe QR image */}
-            <div className="relative">
-              <div className="bg-white rounded-2xl p-3 shadow-[0_8px_32px_rgba(0,0,0,.5)]">
-                <img
-                  src={phonepeQrImg}
-                  alt="PhonePe UPI QR code for KEERTHANA K — scan to pay"
-                  width="240"
-                  height="240"
-                  className="rounded-[10px] block w-[220px] h-auto"
-                  loading="lazy"
-                />
-              </div>
-              {/* PhonePe badge */}
-              <div className="absolute -top-3 -right-3 w-10 h-10 bg-[#5f259f] rounded-full flex items-center justify-center shadow-[0_4px_14px_rgba(95,37,159,.5)] text-white font-bold text-[0.85rem]">
-                ₱e
-              </div>
-            </div>
-
-            {/* UPI details */}
-            <div className="text-center">
-              <div className="text-[0.72rem] font-bold tracking-[0.1em] uppercase text-[#7a5c3a] mb-1">Pay to</div>
-              <div className="font-['Playfair_Display'] text-[1.2rem] font-bold text-[#f0b870]">{UPI_NAME}</div>
-              <div className="text-[#b8956a] text-[0.82rem] mt-0.5 font-mono">{UPI_ID}</div>
-            </div>
-
-            {/* Pay Now button */}
-            <a
-              href={upiLink}
-              className="w-full max-w-[320px] flex items-center justify-center gap-2.5 bg-[#5f259f] hover:bg-[#7b2fc9] text-white rounded-2xl py-4 text-[1rem] font-bold cursor-pointer no-underline transition-all duration-300 hover:shadow-[0_8px_28px_rgba(95,37,159,.55)] hover:translate-y-[-2px] font-['Inter']">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
-              </svg>
-              Pay Now with UPI
-            </a>
-
-            <p className="text-[#4a3520] text-[0.75rem] text-center flex items-center gap-1.5">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              Secure UPI payment · Works with PhonePe, GPay, Paytm &amp; all UPI apps
-            </p>
-          </div>
-        </Reveal>
-      </div>
+        </div>
+      </Reveal>
     </section>
   );
 }
