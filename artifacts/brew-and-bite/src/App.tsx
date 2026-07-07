@@ -633,6 +633,7 @@ function HomePage({ onDetails, onAdd }:
         </div>
       </div>
 
+      <TodaysSpecialsSection onAdd={onAdd}/>
       <QRMenuSection/>
       <GoogleMapsSection/>
       <ReviewsSection/>
@@ -724,6 +725,121 @@ const SEED_REVIEWS: Review[] = [
 const RATING_LABELS: Record<number, string> = {
   1:'Poor', 2:'Below Average', 3:'Good', 4:'Great', 5:'Excellent!'
 };
+
+// ── Today's Specials Section ──────────────────────────────────────────────────
+function useMidnightCountdown() {
+  const getSecondsLeft = () => {
+    const now = new Date();
+    const midnight = new Date(now); midnight.setHours(24, 0, 0, 0);
+    return Math.max(0, Math.floor((midnight.getTime() - now.getTime()) / 1000));
+  };
+  const [secs, setSecs] = useState(getSecondsLeft);
+  useEffect(() => {
+    const id = setInterval(() => setSecs(getSecondsLeft()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const h = String(Math.floor(secs / 3600)).padStart(2, '0');
+  const m = String(Math.floor((secs % 3600) / 60)).padStart(2, '0');
+  const s = String(secs % 60).padStart(2, '0');
+  return { h, m, s };
+}
+
+const DAILY_SPECIALS: { day: number; ids: number[]; discount: number }[] = [
+  { day: 0, ids: [3, 6, 1], discount: 20 }, // Sun
+  { day: 1, ids: [2, 4, 5], discount: 15 }, // Mon
+  { day: 2, ids: [1, 3, 6], discount: 18 }, // Tue
+  { day: 3, ids: [5, 2, 4], discount: 20 }, // Wed
+  { day: 4, ids: [4, 1, 3], discount: 15 }, // Thu
+  { day: 5, ids: [6, 5, 2], discount: 25 }, // Fri
+  { day: 6, ids: [3, 4, 1], discount: 20 }, // Sat
+];
+
+function TodaysSpecialsSection({ onAdd }: { onAdd: (i: MenuItem) => void }) {
+  const today = new Date().getDay();
+  const { ids, discount } = DAILY_SPECIALS[today];
+  const specials = ids.map(id => ITEMS.find(i => i.id === id)!);
+  const { h, m, s } = useMidnightCountdown();
+
+  return (
+    <section aria-label="Today's specials" className="bg-[#1a0f06] py-16 sm:py-20 px-6 relative" id="specials">
+      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#d4924d] to-transparent"/>
+      <div className="max-w-[960px] mx-auto">
+
+        {/* Header */}
+        <Reveal>
+          <div className="text-center mb-10">
+            <p className="text-[0.72rem] font-bold tracking-[0.14em] uppercase text-[#d4924d] mb-2">Today Only</p>
+            <h2 className="font-['Playfair_Display'] text-[clamp(1.6rem,3.5vw,2.5rem)] text-[#f0b870] font-bold">Today's Specials</h2>
+            <div className="w-15 h-[3px] bg-gradient-to-r from-[#9a6530] to-[#f0b870] rounded mt-3.5 mx-auto"/>
+            <p className="mt-4 text-[#b8956a] text-[0.95rem] max-w-[480px] mx-auto leading-[1.75]">
+              Handpicked deals — fresh every day, gone at midnight. Grab them before they're sold out!
+            </p>
+            {/* Countdown */}
+            <div className="mt-6 inline-flex items-center gap-2 bg-[rgba(212,146,77,.1)] border border-[rgba(212,146,77,.28)] rounded-2xl px-5 py-3">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d4924d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span className="text-[#b8956a] text-[0.8rem]">Expires in</span>
+              {[h, m, s].map((val, i) => (
+                <span key={i} className="flex items-center gap-1.5">
+                  <span className="font-['Playfair_Display'] text-[1.1rem] font-bold text-[#f0b870] tabular-nums">{val}</span>
+                  {i < 2 && <span className="text-[#d4924d] font-bold">:</span>}
+                </span>
+              ))}
+              <span className="text-[#7a5c3a] text-[0.72rem] ml-0.5">h m s</span>
+            </div>
+          </div>
+        </Reveal>
+
+        {/* Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {specials.map((item, i) => {
+            const discountedPrice = Math.round(item.price * (1 - discount / 100));
+            return (
+              <Reveal key={item.id} delay={i * 0.1}>
+                <div className="bg-gradient-to-br from-[#1e1108] to-[#150c04] border border-[rgba(212,146,77,.22)] rounded-2xl overflow-hidden flex flex-col hover:border-[rgba(212,146,77,.45)] hover:translate-y-[-5px] transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,.35)]">
+                  {/* Image */}
+                  <div className="relative h-44 overflow-hidden">
+                    <img src={item.img} alt={item.name} loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"/>
+                    {/* Discount badge */}
+                    <div className="absolute top-3 left-3 bg-gradient-to-br from-[#9f1239] to-[#e11d48] text-white text-[0.72rem] font-bold px-2.5 py-1 rounded-full shadow-[0_4px_14px_rgba(0,0,0,.4)]">
+                      -{discount}% TODAY
+                    </div>
+                    {/* Today Only badge */}
+                    <div className="absolute top-3 right-3 bg-[rgba(0,0,0,.65)] backdrop-blur-sm border border-[rgba(212,146,77,.35)] text-[#f0b870] text-[0.68rem] font-bold px-2 py-1 rounded-full flex items-center gap-1">
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="#f0b870"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      Special
+                    </div>
+                  </div>
+                  {/* Body */}
+                  <div className="flex flex-col flex-1 p-4.5 gap-3">
+                    <div>
+                      <span className="text-[0.66rem] font-bold tracking-[0.1em] uppercase text-[#d4924d]">{item.tag}</span>
+                      <h3 className="font-['Playfair_Display'] text-[1.05rem] text-[#f0b870] font-bold mt-0.5">{item.name}</h3>
+                      <p className="text-[#b8956a] text-[0.8rem] leading-[1.65] mt-1.5 line-clamp-2">{item.desc}</p>
+                    </div>
+                    <div className="mt-auto flex items-center justify-between pt-2 border-t border-[rgba(212,146,77,.12)]">
+                      <div>
+                        <span className="font-['Playfair_Display'] text-[1.2rem] font-black text-[#d4924d]">₹{discountedPrice}</span>
+                        <span className="text-[#4a3520] text-[0.78rem] line-through ml-1.5">₹{item.price}</span>
+                      </div>
+                      <button onClick={() => onAdd(item)}
+                        className="flex items-center gap-1.5 bg-gradient-to-br from-[#9a6530] to-[#d4924d] text-white border-none rounded-xl px-3.5 py-2 text-[0.8rem] font-bold cursor-pointer transition-all duration-200 hover:shadow-[0_4px_16px_rgba(212,146,77,.4)] hover:translate-y-[-1px] font-['Inter']">
+                        <CartSvg size={13}/>
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function ReviewsSection() {
   const reviews = SEED_REVIEWS;
