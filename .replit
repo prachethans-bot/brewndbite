@@ -17,3 +17,16 @@ expertMode = true
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 20000
+
+[[io]]
+name = "web"
+type = "web"
+path = "/"
+localPort = 5173
+
+[io.development]
+run = "cd artifacts/brew-and-bite && pnpm run dev"
+
+[io.env]
+PORT = "5173"
+BASE_PATH = "/"
