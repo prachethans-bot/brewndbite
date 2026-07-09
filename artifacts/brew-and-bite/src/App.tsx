@@ -650,10 +650,10 @@ function HomePage({ onDetails, onAdd }:
 
 // ── Social Media Section ─────────────────────────────────────────────────────
 const SOCIALS = [
-  { name:'Instagram', handle:'@prachethan_k', followers:'', url:'https://instagram.com/prachethan_k', color:'linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)', icon:( <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> ) },
-  { name:'Facebook', handle:'@prachethan_k', followers:'', url:'https://facebook.com/prachethan_k', color:'linear-gradient(135deg,#1877f2,#166fe5)', icon:( <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> ) },
-  { name:'Twitter / X', handle:'@BrewAndBiteCafe', followers:'5.8K', url:'https://twitter.com/BrewAndBiteCafe', color:'linear-gradient(135deg,#111,#333)', icon:( <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> ) },
-  { name:'YouTube', handle:'prachethan.star', followers:'', url:'https://youtube.com/@prachethan.star', color:'linear-gradient(135deg,#ff0000,#cc0000)', icon:( <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg> ) },
+  { name:'Instagram', handle:'@brewandbitecafe', followers:'', url:'https://instagram.com/brewandbitecafe', color:'linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)', icon:( <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> ) },
+  { name:'Facebook', handle:'@brewandbitecafe', followers:'', url:'https://facebook.com/brewandbitecafe', color:'linear-gradient(135deg,#1877f2,#166fe5)', icon:( <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> ) },
+  { name:'Twitter / X', handle:'@brewandbitecafe', followers:'5.8K', url:'https://twitter.com/brewandbitecafe', color:'linear-gradient(135deg,#111,#333)', icon:( <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> ) },
+  { name:'YouTube', handle:'@brewandbitecafe', followers:'', url:'https://youtube.com/@brewandbitecafe', color:'linear-gradient(135deg,#ff0000,#cc0000)', icon:( <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg> ) },
 ];
 
 function SocialMediaSection() {
@@ -1135,18 +1135,18 @@ function AboutPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mt-8">
             {[
-              { label:'Location', val:'Koramangala, Bengaluru', d:<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>, dot:<circle cx="12" cy="10" r="3"/> },
-              { label:'Opening Hours', val:'7:00 AM – 10:00 PM', d:<circle cx="12" cy="12" r="10"/>, dot:<polyline points="12 6 12 12 16 14"/> },
-              { label:'Reservations', val:'+91 98765 43210', d:<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/>, dot:null },
-              { label:'Email Us', val:'hello@brewandbite.in', d:<><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></>, dot:null },
-            ].map(({ label, val, d, dot }) => (
-              <div key={label} className="flex gap-3 items-start bg-[rgba(212,146,77,.06)] border border-[rgba(212,146,77,.18)] rounded-[14px] px-4 py-3.5">
+              { label:'Location', val:'Koramangala, Bengaluru', d:<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>, dot:<circle cx="12" cy="10" r="3"/>, full:false },
+              { label:'Opening Hours', val:'7:00 AM – 10:00 PM', d:<circle cx="12" cy="12" r="10"/>, dot:<polyline points="12 6 12 12 16 14"/>, full:false },
+              { label:'Reservations', val:'+91 98765 43210', d:<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/>, dot:null, full:false },
+              { label:'Email Us', val:'hello@brewandbite.in', d:<><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></>, dot:null, full:true },
+            ].map(({ label, val, d, dot, full }) => (
+              <div key={label} className={`flex gap-3 items-start bg-[rgba(212,146,77,.06)] border border-[rgba(212,146,77,.18)] rounded-[14px] px-4 py-3.5${full ? ' sm:col-span-2' : ''}`}>
                 <div className="w-9.5 h-9.5 rounded-[10px] flex-shrink-0 bg-gradient-to-br from-[#78350f] to-[#d97706] flex items-center justify-center">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{d}{dot}</svg>
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <div className="text-[0.72rem] font-bold tracking-[0.1em] uppercase text-[#7a5c3a] mb-0.5">{label}</div>
-                  <div className="text-[0.88rem] text-[#f5e6ce] font-medium">{val}</div>
+                  <div className="text-[0.88rem] text-[#f5e6ce] font-medium break-all">{val}</div>
                 </div>
               </div>
             ))}
@@ -1190,14 +1190,19 @@ function AboutPage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-[960px] mx-auto">
           {[
-            { delay:0, color:'linear-gradient(135deg,#78350f,#d97706)', icon:<><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></>, title:'Quality First', text:'We source only the finest ingredients — from premium single-origin coffee beans to fresh, locally-grown produce every single day.' },
-            { delay:.12, color:'linear-gradient(135deg,#164e63,#0891b2)', icon:<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>, title:'Community Spirit', text:"We're more than a cafe — a gathering place where local artists, neighbours, and strangers become lifelong friends." },
-            { delay:.24, color:'linear-gradient(135deg,#14532d,#16a34a)', icon:<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>, title:'Made Fresh Daily', text:"Every item on our menu is prepared fresh each morning. We never compromise on freshness or flavour — ever." },
-          ].map(({ delay, color, icon, title, text }) => (
+            { delay:0, stroke:'#d97706', fill:'rgba(217,119,6,.12)', icon:<><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></>, title:'Quality First', text:'We source only the finest ingredients — from premium single-origin coffee beans to fresh, locally-grown produce every single day.' },
+            { delay:.12, stroke:'#0891b2', fill:'rgba(8,145,178,.12)', icon:<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>, title:'Community Spirit', text:"We're more than a cafe — a gathering place where local artists, neighbours, and strangers become lifelong friends." },
+            { delay:.24, stroke:'#16a34a', fill:'rgba(22,163,74,.12)', icon:<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>, title:'Made Fresh Daily', text:"Every item on our menu is prepared fresh each morning. We never compromise on freshness or flavour — ever." },
+          ].map(({ delay, stroke, fill, icon, title, text }) => (
             <Reveal key={title} delay={delay}>
               <div className="bg-gradient-to-br from-[#1e1108] to-[#150c04] border border-[rgba(212,146,77,.2)] rounded-[18px] px-5.5 py-7.5 text-center transition-all duration-[360ms] h-full hover:translate-y-[-7px] hover:border-[rgba(212,146,77,.35)]">
-                <div className="w-14.5 h-14.5 rounded-2xl mx-auto mb-4.5 flex items-center justify-center" style={{ background: color }}>
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{icon}</svg>
+                <div className="mx-auto mb-4.5 w-[64px] h-[64px]">
+                  <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                    <circle cx="32" cy="32" r="29" fill={fill} stroke={stroke} strokeWidth="2"/>
+                    <g transform="translate(20,20)">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{icon}</svg>
+                    </g>
+                  </svg>
                 </div>
                 <h3 className="font-['Playfair_Display'] text-[1.1rem] text-[#f0b870]">{title}</h3>
                 <p className="mt-2.5 text-[#b8956a] text-[0.84rem] leading-[1.72]">{text}</p>

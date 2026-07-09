@@ -4,9 +4,9 @@
   "license": "MIT",
   "scripts": {
     "preinstall": "echo Using pnpm",
-    "build": "pnpm run typecheck && pnpm -r --if-present run build",
+    "build": "npx pnpm --filter @workspace/brew-and-bite run build",
     "typecheck:libs": "tsc --build",
-    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck"
+    "typecheck": "npx pnpm run typecheck:libs && npx pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck"
   },
   "private": true,
   "devDependencies": {
