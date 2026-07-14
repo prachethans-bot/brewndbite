@@ -633,7 +633,7 @@ function HomePage({ onDetails, onAdd }:
         </div>
       </div>
 
-      <QRMenuSection/>
+      <MenuSection onAdd={onAdd}/>
       <GoogleMapsSection/>
       <ReviewsSection/>
       <ContactSection/>
@@ -1011,94 +1011,119 @@ function GoogleMapsSection() {
   );
 }
 
-// ── QR Menu Section ──────────────────────────────────────────────────────────
-function QRMenuSection() {
-  const [shared, setShared] = useState(false);
-  const menuUrl = 'https://caf-menu-instant.vercel.app/';
-  const qrUrl   = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://caf-menu-instant.vercel.app/&format=png&margin=10';
-
-  const handleShare = async () => {
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: 'Brew & Bite Menu', text: 'Check out the menu at Brew & Bite Cafe!', url: menuUrl });
-      } else {
-        await navigator.clipboard.writeText(menuUrl);
-        setShared(true);
-        setTimeout(() => setShared(false), 2500);
-      }
-    } catch {
-      try { await navigator.clipboard.writeText(menuUrl); setShared(true); setTimeout(() => setShared(false), 2500); } catch {}
-    }
-  };
-
+// ── Menu Section ────────────────────────────────────────────────────────────
+interface MenuCategory {
+  category: string;
+  tagline: string;
+  img: string;
+  imgAlt: string;
+  items: { name: string; desc: string; price: number }[];
+}
+const MENU_CATEGORIES: MenuCategory[] = [
+  {
+    category: 'Hot Beverages',
+    tagline: 'Freshly brewed to warm your soul',
+    img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=80',
+    imgAlt: 'Steaming cups of hot coffee and chai on a wooden table',
+    items: [
+      { name: 'Masala Chai', desc: 'Aromatic spiced milk tea with ginger & cardamom', price: 49 },
+      { name: 'Signature Coffee', desc: 'Double-shot espresso with silky microfoam art', price: 79 },
+      { name: 'Hot Chocolate', desc: 'Rich Belgian cocoa topped with whipped cream', price: 99 },
+    ],
+  },
+  {
+    category: 'Cold Beverages',
+    tagline: 'Chilled refreshers for every mood',
+    img: 'https://images.unsplash.com/photo-1461023058943-07fcbe16b858?w=1200&q=80',
+    imgAlt: 'Iced coffee and cold brew drinks with ice on a cafe counter',
+    items: [
+      { name: 'Oreo Milkshake', desc: 'Thick blend of Oreo, milk & vanilla ice cream', price: 119 },
+      { name: 'Iced Americano', desc: 'Double espresso over ice with cold filtered water', price: 89 },
+      { name: 'Cold Brew', desc: '12-hour slow steeped, smooth and naturally sweet', price: 109 },
+    ],
+  },
+  {
+    category: 'Snacks & Bites',
+    tagline: 'Perfect companions for your cup',
+    img: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=1200&q=80',
+    imgAlt: 'Assorted cafe snacks including cookies and pastries on a plate',
+    items: [
+      { name: 'Spiced Puffs', desc: 'Golden flaky pastry with spiced potato & peas', price: 59 },
+      { name: 'Choco Chip Cookies', desc: 'Thick-baked with dark chocolate chips, warm & gooey', price: 39 },
+      { name: 'Cheese Garlic Bread', desc: 'Toasted bread with mozzarella & herb garlic butter', price: 69 },
+    ],
+  },
+  {
+    category: 'Main Course',
+    tagline: 'Hearty meals made fresh to order',
+    img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1200&q=80',
+    imgAlt: 'Gourmet burger with fresh ingredients on a wooden board',
+    items: [
+      { name: 'Classic Burger', desc: 'Juicy patty, fresh veggies & house sauces in a brioche bun', price: 149 },
+      { name: 'Veg Sandwich', desc: 'Grilled multigrain with fresh veggies & cheese', price: 99 },
+      { name: 'Pasta Alfredo', desc: 'Creamy white sauce penne with herbs & parmesan', price: 179 },
+    ],
+  },
+];
+function MenuSection({ onAdd }: { onAdd: (item: MenuItem) => void }) {
   return (
-    <section aria-label="Scan digital menu QR code" className="bg-[#1a0f06] py-16 sm:py-20 px-6 relative" id="qr-menu">
+    <section aria-label="Our menu" className="bg-[#100904] py-16 sm:py-20 px-6 relative" id="menu">
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#d4924d] to-transparent"/>
-      <div className="max-w-[900px] mx-auto">
-        <div className="bg-gradient-to-br from-[#1e1108] to-[#150c04] border border-[rgba(212,146,77,.25)] rounded-3xl px-6 py-10 sm:px-12 sm:py-14 flex flex-col lg:flex-row items-center gap-10 shadow-[0_16px_60px_rgba(0,0,0,.5)]">
-          <Reveal>
-            <div className="relative flex-shrink-0">
-              <div className="bg-[rgba(212,146,77,.08)] border border-[rgba(212,146,77,.3)] rounded-2xl p-4 shadow-[0_8px_32px_rgba(0,0,0,.4)]">
-                <img
-                  src={qrUrl}
-                  alt="QR code to scan and view Brew & Bite digital menu"
-                  width="220"
-                  height="220"
-                  loading="lazy"
-                  className="rounded-[10px] block"
-                />
+      <div className="max-w-[1100px] mx-auto">
+        <Reveal>
+          <div className="text-center mb-12 sm:mb-14">
+            <p className="text-[0.72rem] font-bold tracking-[0.14em] uppercase text-[#d4924d] mb-2">Our Menu</p>
+            <h2 className="font-['Playfair_Display'] text-[clamp(1.8rem,4.5vw,3rem)] text-[#f0b870] font-bold leading-[1.15]">Crafted with Passion</h2>
+            <div className="w-14 h-[3px] bg-gradient-to-r from-[#9a6530] to-[#f0b870] rounded mx-auto mt-4"/>
+          </div>
+        </Reveal>
+        {MENU_CATEGORIES.map((cat, idx) => {
+          const reversed = idx % 2 === 1;
+          return (
+            <Reveal key={cat.category} delay={0.05}>
+              <div className={`flex flex-col lg:flex-row gap-6 lg:gap-10 mb-10 sm:mb-14 items-stretch ${reversed ? 'lg:flex-row-reverse' : ''}`}>
+                {/* Text panel */}
+                <div className="flex-1 bg-[#f5e6ce] rounded-2xl p-6 sm:p-8 lg:p-10 flex flex-col">
+                  <div className="flex items-center gap-3 mb-1">
+                    <div className="w-1.5 h-7 bg-gradient-to-b from-[#9a6530] to-[#d4924d] rounded-full"/>
+                    <h3 className="font-['Playfair_Display'] text-[1.5rem] sm:text-[1.75rem] font-bold text-[#1e1108]">{cat.category}</h3>
+                  </div>
+                  <p className="italic text-[#7a5c3a] text-[0.92rem] mb-5 sm:mb-6 ml-[18px]">{cat.tagline}</p>
+                  <div className="flex flex-col gap-4 sm:gap-5 flex-1">
+                    {cat.items.map((it) => (
+                      <div key={it.name} className="flex items-start justify-between gap-4 pb-4 sm:pb-5 border-b border-[rgba(154,101,48,.18)] last:border-b-0">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-['Playfair_Display'] text-[1.05rem] sm:text-[1.15rem] font-bold text-[#1e1108] leading-tight">{it.name}</h4>
+                          <p className="text-[0.82rem] sm:text-[0.88rem] text-[#7a5c3a] mt-1 leading-[1.55]">{it.desc}</p>
+                        </div>
+                        <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                          <span className="text-[1.1rem] sm:text-[1.2rem] font-bold text-[#9a6530] whitespace-nowrap">₹{it.price}</span>
+                          <button
+                            onClick={() => {
+                              const match = ITEMS.find((m) => m.name === it.name);
+                              onAdd(match ?? { id: Date.now(), name: it.name, tag: cat.category, price: it.price, desc: it.desc, img: cat.img, ingredients: [] });
+                            }}
+                            className="text-[0.76rem] font-semibold border-none rounded-full px-3.5 py-1.5 cursor-pointer bg-gradient-to-br from-[#9a6530] to-[#d4924d] text-white flex items-center gap-1.5 font-['Inter'] hover:shadow-[0_4px_16px_rgba(212,146,77,.4)] transition-shadow whitespace-nowrap"
+                          >
+                            <CartSvg size={13}/> Add
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {/* Image panel */}
+                <div className="lg:w-[42%] relative rounded-2xl overflow-hidden min-h-[280px] lg:min-h-0">
+                  <img src={cat.img} alt={cat.imgAlt} loading="lazy" className="absolute inset-0 w-full h-full object-cover"/>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(16,9,4,.85)] via-[rgba(16,9,4,.2)] to-transparent"/>
+                  <div className="absolute bottom-5 left-5 right-5">
+                    <span className="inline-block text-[0.68rem] font-bold tracking-[0.14em] uppercase text-[#f0b870] bg-[rgba(16,9,4,.6)] backdrop-blur-sm border border-[rgba(212,146,77,.3)] rounded-full px-3.5 py-1.5">{cat.category}</span>
+                  </div>
+                </div>
               </div>
-              <div className="absolute -top-3 -right-3 w-9 h-9 bg-gradient-to-br from-[#9a6530] to-[#f0b870] rounded-full flex items-center justify-center shadow-[0_4px_14px_rgba(212,146,77,.4)] animate-[pulse_2.5s_infinite]">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-                  <path d="M14 14h3v3M17 20h3M20 17v3"/>
-                </svg>
-              </div>
-            </div>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="text-center lg:text-left flex-1 max-w-[460px]">
-              <p className="text-[0.72rem] font-bold tracking-[0.14em] uppercase text-[#d4924d] mb-2">Digital Menu</p>
-              <h2 className="font-['Playfair_Display'] text-[clamp(1.5rem,3.5vw,2.2rem)] text-[#f0b870] font-bold leading-[1.2]">Scan to View Our Digital Menu</h2>
-              <div className="w-12 h-[3px] bg-gradient-to-r from-[#9a6530] to-[#f0b870] rounded mt-3.5 lg:mx-0 mx-auto"/>
-              <p className="mt-4 text-[#b8956a] text-[0.95rem] leading-[1.75]">Point your phone camera at the QR code to instantly browse our full menu — no app needed. Save your favourites and order with ease!</p>
-              <div className="mt-7 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <a
-                  href="/menu.pdf"
-                  download
-                  onClick={(e) => { e.preventDefault(); window.open(menuUrl, '_blank'); }}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-br from-[#9a6530] to-[#d4924d] text-white rounded-[14px] px-5 py-3 text-[0.88rem] font-semibold cursor-pointer no-underline transition-all duration-300 hover:shadow-[0_6px_24px_rgba(212,146,77,.4)] hover:translate-y-[-2px] font-['Inter']">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-                  </svg>
-                  View Full Menu
-                </a>
-                <button
-                  onClick={handleShare}
-                  className={`flex items-center justify-center gap-2 rounded-[14px] px-5 py-3 text-[0.88rem] font-semibold cursor-pointer transition-all duration-300 hover:translate-y-[-2px] font-['Inter'] ${shared ? 'bg-[rgba(34,197,94,.12)] border border-[rgba(34,197,94,.35)] text-[#22c55e]' : 'bg-[rgba(212,146,77,.1)] border border-[rgba(212,146,77,.3)] text-[#d4924d] hover:bg-[rgba(212,146,77,.18)]'}`}>
-                  {shared ? (
-                    <>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                      Copied!
-                    </>
-                  ) : (
-                    <>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                      </svg>
-                      Share Menu
-                    </>
-                  )}
-                </button>
-              </div>
-              <p className="mt-5 text-[0.78rem] text-[#7a5c3a] flex items-center gap-1.5 justify-center lg:justify-start">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                Works with any smartphone camera — no app required
-              </p>
-            </div>
-          </Reveal>
-        </div>
+            </Reveal>
+          );
+        })}
       </div>
     </section>
   );
